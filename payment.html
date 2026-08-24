@@ -705,12 +705,32 @@ footer {
 
         modal: {
 
-            ondismiss: function () {
+            ondismiss: async function () {
 
-                console.log(
-                    "Razorpay payment window closed."
-                );
-            }
+    console.log("Razorpay payment window closed.");
+
+    try {
+
+        await fetch(`${API_URL}/api/release-seats`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                order_id: orderId
+            })
+        });
+
+        console.log("Held seats released.");
+
+    } catch (error) {
+
+        console.error(
+            "Failed to release seats:",
+            error
+        );
+    }
+}
         }
     };
 
