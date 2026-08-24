@@ -379,6 +379,18 @@ footer {
     </div>
 
     <div class="input-group">
+    <label for="altPhone">Alternative Phone Number</label>
+
+    <input
+        type="tel"
+        id="altPhone"
+        placeholder="Enter alternative phone number"
+    >
+
+    <small id="altPhoneError" class="error-message"></small>
+    </div>
+
+    <div class="input-group">
         <label for="branch">Branch</label>
 
         <select id="branch" required>
@@ -467,22 +479,26 @@ footer {
 
     const name = document.getElementById("name");
     const phone = document.getElementById("phone");
+    const altPhone = document.getElementById("altPhone");
     const email = document.getElementById("email");
     const branch = document.getElementById("branch");
 
     const nameError = document.getElementById("nameError");
     const phoneError = document.getElementById("phoneError");
+    const altPhoneError = document.getElementById("altPhoneError");
     const emailError = document.getElementById("emailError");
     const branchError = document.getElementById("branchError");
 
     // Clear previous errors
     nameError.textContent = "";
     phoneError.textContent = "";
+    altPhoneError.textContent = "";
     emailError.textContent = "";
     branchError.textContent = "";
 
     name.classList.remove("input-error");
     phone.classList.remove("input-error");
+    altPhone.classList.remove("input-error");
     email.classList.remove("input-error");
     branch.classList.remove("input-error");
 
@@ -542,6 +558,17 @@ footer {
 
         phone.classList.add("input-error");
         valid = false;
+    }
+
+    if (
+    altPhone.value.trim() !== "" &&
+    !altPhonePattern.test(altPhone.value.trim())
+    ) {
+    altPhoneError.textContent =
+        "Please enter a valid 10-digit mobile number.";
+
+    altPhone.classList.add("input-error");
+    valid = false;
     }
 
     // -----------------------------
@@ -628,7 +655,8 @@ footer {
                             buyer_phone:
                                 phone.value.trim(),
 
-                            buyer_alt_phone: "",
+                            buyer_alt_phone: 
+                                altPhone.value.trim(),
 
                             selected_branch:
                                 branch.value,
@@ -670,15 +698,6 @@ footer {
                 );
             }
         },
-
-        /*prefill: {
-
-            name: name.value.trim(),
-
-            email: email.value.trim(),
-
-            contact: phone.value.trim()
-        },*/
 
         theme: {
             color: "#0a84ff"
