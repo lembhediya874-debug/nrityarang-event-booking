@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ticket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #1f1f1f;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+/* MAIN CONTAINER */
+
+.main-container {
+    width: 90%;
+    max-width: 700px;
+    margin: 30px auto;
+    border: 1px solid #4a4a4a;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #1f1f1f;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+/* HEADER */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1b1b1b;
+    color: #ffffff;
+    padding: 15px 20px;
+    border-bottom: 1px solid #444;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo i {
+    color: #0a84ff;
+    font-size: 24px;
+}
+
+.logo h4 {
+    font-size: 16px;
+}
+
+.menu {
+    font-size: 20px;
+    color: #ddd;
+}
+
+/* BACK BUTTON */
+
+.back {
+    display: block;
+    color: #777;
+    margin: 20px 25px 10px;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.back i {
+    margin-right: 8px;
+}
+
+.back:hover {
+    color: #7b2cbf;
+}
+
+/* HERO */
+
+.hero {
+    text-align: center;
+    padding: 10px 20px 20px;
+    color: white;
+}
+
+.hero h2 {
+    font-size: 25px;
+}
+
+/* BOOKING INFORMATION */
+
+.booking-summary {
+    margin: 0 25px 20px;
+    padding: 20px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 14px;
+}
+
+.booking-summary h3 {
+    color: #0a84ff;
+    margin-bottom: 15px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0;
+    font-size: 15px;
+}
+
+.summary-label {
+    color: #999;
+}
+
+.summary-value {
+    font-weight: bold;
+}
+
+#seatNumbers {
+    color: #0a84ff;
+}
+
+/* CUSTOMER DETAILS */
+
+.customer-details {
+    margin: 0 25px;
+}
+
+.customer-details h3 {
+    margin-bottom: 15px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #555;
+    border-radius: 9px;
+    outline: none;
+    font-size: 14px;
+}
+
+.input-group input:focus {
+    border-color: #0a84ff;
+    box-shadow: 0 0 0 2px rgba(123,44,191,0.1);
+}
+
+.input-group select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #555;
+    border-radius: 9px;
+    font-size: 15px;
+    /*background: white;
+    color: #333;*/
+    outline: none;
+    cursor: pointer;
+}
+
+.input-group select:focus {
+   border-color: #0a84ff;
+    box-shadow: 0 0 0 2px rgba(123,44,191,0.1);
+}
+
+/* TOTAL */
+
+.total-section {
+    margin: 20px 25px;
+    padding: 18px 0;
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-section span:first-child {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#totalAmount {
+    color: #0a84ff;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+/* PAYMENT BUTTON */
+
+#payBtn {
+    display: block;
+    width: calc(100% - 50px);
+    margin: 20px 25px;
+    padding: 15px;
+    background: #0a84ff;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#payBtn:hover {
+    background: deepskyblue;
+    transform: translateY(-1px);
+}
+
+/* SECURITY */
+
+.security {
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    margin: 15px 20px 25px;
+}
+
+.security i {
+    color: #0a84ff;
+    margin-right: 5px;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 5px;
+    border-top: 1px solid #e4e4ea;
+    color: #777;
+    font-size: 13px;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .main-container {
+        width: 95%;
+        margin: 15px auto;
+    }
+
+    .header {
+        padding: 13px 15px;
+    }
+
+    .booking-summary,
+    .customer-details {
+        margin-left: 18px;
+        margin-right: 18px;
+    }
+
+    #payBtn {
+        width: calc(100% - 36px);
+        margin-left: 18px;
+        margin-right: 18px;
+    }
+}
+
+.error-message {
+    color: #ff4d6d;
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+}
+
+.input-error {
+    border: 1px solid #ff4d6d !important;
+}
+
+</style>
+
+<body>
+ 
+
+<div class="main-container">
+
+      <header class="header">
+
+        <div class="logo">
+          <i class="fa-solid fa-ticket"></i>
+        <h4>ticket booking website</h4>
+        </div>
+        
+      <i class="fa-solid fa-bars menu"></i>
+    </header>
+
+    <section class="hero">
+        <h1>Payment details</h1>
+    </section>
+
+     <div class="booking-summary">
+
+    <h3>Booking Summary</h3>
+
+    <div class="summary-row">
+        <span class="summary-label">
+            Selected Seats
+        </span>
+
+        <span class="summary-value" id="seatNumbers">
+            -
+        </span>
+    </div>
+
+    <div class="summary-row">
+        <span class="summary-label">
+            Number of Tickets
+        </span>
+
+        <span class="summary-value" id="seatCount">
+            0
+        </span>
+    </div>
+
+
+</div>
+
+<div class="customer-details">
+
+    <h3>Customer Details</h3>
+
+    <div class="input-group">
+        <label for="name">Full Name</label>
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Enter your name"
+            required
+        >
+        <small id="nameError" class="error-message"></small>
+    </div>
+
+    <div class="input-group">
+        <label for="email">Email</label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            required
+        >
+        <small id="emailError" class="error-message"></small>
+    </div>
+
+    <div class="input-group">
+        <label for="phone">Phone Number</label>
+
+        <input
+            type="tel"
+            id="phone"
+            placeholder="Enter your phone number"
+            required
+        >
+        <small id="phoneError" class="error-message"></small>
+    </div>
+
+    <div class="input-group">
+        <label for="branch">Branch</label>
+
+        <select id="branch" required>
+            <option value="">Select Branch</option>
+            <option value="Dahisar east">Dahisar east</option>
+            <option value="Dahisar west">Dahisar west</option>
+            <option value="Borivali east">Borivali east</option>
+            <option value="Goregaon west">Goregaon west</option>
+            <option value="Nalasopara">Nalasopara</option>
+        </select>
+        <small id="branchError" class="error-message"></small>
+    </div>
+
+</div>
+
+
+<div class="total-section">
+
+    <span>Total Amount</span>
+
+    <span id="totalAmount">
+        ₹0
+    </span>
+
+</div>
+
+
+<button id="payBtn">
+    Proceed to Payment
+</button>
+
+
+    <footer>
+      <div class="security">
+    <i class="fa-solid fa-lock"></i>
+    Secure payment powered by Razorpay
+    </div>
+    </footer>
+    </div>
+
+</div>
+
+<script>
+    const API_URL = "https://nrityarang-event-booking.onrender.com";
+    const RAZORPAY_KEY_ID = "rzp_test_TQOBjcw7HjPfwN";
+
+    // Get information from the URL
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    // Get selected seats
+    const seatsParam = params.get("seats") || "";
+    const seats = seatsParam
+        ? seatsParam.split(",")
+        : [];
+
+    // Get total amount
+    const total = Number(
+        params.get("total")
+    ) || 0;
+
+    const orderId = params.get("orderId"); /*|| ""*/
+
+    // Display selected seats
+    document.getElementById("seatNumbers")
+        .textContent =
+        seats.length > 0
+            ? seats.join(", ")
+            : "No seats selected";
+
+
+    // Display number of tickets
+    document.getElementById("seatCount")
+        .textContent = seats.length;
+
+
+    // Display total amount
+    document.getElementById("totalAmount")
+        .textContent =
+        "₹" + total.toLocaleString("en-IN");
+
+        
+
+    document.getElementById("payBtn").addEventListener("click", function () {
+
+    const name = document.getElementById("name");
+    const phone = document.getElementById("phone");
+    const email = document.getElementById("email");
+    const branch = document.getElementById("branch");
+
+    const nameError = document.getElementById("nameError");
+    const phoneError = document.getElementById("phoneError");
+    const emailError = document.getElementById("emailError");
+    const branchError = document.getElementById("branchError");
+
+    // Clear previous errors
+    nameError.textContent = "";
+    phoneError.textContent = "";
+    emailError.textContent = "";
+    branchError.textContent = "";
+
+    name.classList.remove("input-error");
+    phone.classList.remove("input-error");
+    email.classList.remove("input-error");
+    branch.classList.remove("input-error");
+
+    let valid = true;
+
+    // -----------------------------
+    // NAME VALIDATION
+    // -----------------------------
+
+    if (name.value.trim() === "") {
+        nameError.textContent = "Please enter your full name.";
+        name.classList.add("input-error");
+        valid = false;
+    }
+
+    // -----------------------------
+    // EMAIL VALIDATION
+    // -----------------------------
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email.value.trim() === "") {
+
+        emailError.textContent =
+            "Please enter your email address.";
+
+        email.classList.add("input-error");
+        valid = false;
+
+    } else if (!emailPattern.test(email.value.trim())) {
+
+        emailError.textContent =
+            "Please enter a valid email address.";
+
+        email.classList.add("input-error");
+        valid = false;
+    }
+
+    // -----------------------------
+    // PHONE VALIDATION
+    // -----------------------------
+
+    const phonePattern = /^[6-9]\d{9}$/;
+
+    if (phone.value.trim() === "") {
+
+        phoneError.textContent =
+            "Please enter your phone number.";
+
+        phone.classList.add("input-error");
+        valid = false;
+
+    } else if (!phonePattern.test(phone.value.trim())) {
+
+        phoneError.textContent =
+            "Please enter a valid 10-digit mobile number.";
+
+        phone.classList.add("input-error");
+        valid = false;
+    }
+
+    // -----------------------------
+    // BRANCH VALIDATION
+    // -----------------------------
+
+    if (branch.value === "") {
+
+        branchError.textContent =
+            "Please select your branch.";
+
+        branch.classList.add("input-error");
+        valid = false;
+    }
+
+    // Stop if validation failed
+    if (!valid) {
+        return;
+    }
+
+    // Make sure order ID exists
+    if (!orderId) {
+        alert("Payment order was not created. Please go back and select your seats again.");
+        return;
+    }
+
+    // -----------------------------
+    // OPEN RAZORPAY
+    // -----------------------------
+
+    const options = {
+
+        key: RAZORPAY_KEY_ID,
+
+        amount: total * 100,
+
+        currency: "INR",
+
+        name: "Nrityarang Event Booking",
+
+        description: "Event Ticket Booking",
+
+        order_id: orderId,
+
+        prefill: {
+        name: name.value.trim(),
+        email: email.value.trim(),
+        contact: phone.value.trim()
+        },
+
+        handler: async function (response) {
+
+            console.log("Razorpay payment response:", response);
+
+            try {
+
+                // Send payment details to backend
+                const verifyResponse = await fetch(
+                    `${API_URL}/api/verify-payment`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            razorpay_order_id:
+                                response.razorpay_order_id,
+
+                            razorpay_payment_id:
+                                response.razorpay_payment_id,
+
+                            razorpay_signature:
+                                response.razorpay_signature,
+
+                            buyer_name:
+                                name.value.trim(),
+
+                            buyer_email:
+                                email.value.trim(),
+
+                            buyer_phone:
+                                phone.value.trim(),
+
+                            buyer_alt_phone: "",
+
+                            selected_branch:
+                                branch.value,
+
+                            seats: seats
+                        })
+                    }
+                );
+
+                const result =
+                    await verifyResponse.json();
+
+                console.log(
+                    "Payment verification response:",
+                    result
+                );
+
+                if (!verifyResponse.ok ||
+                    !resultData.success) {
+
+                    throw new Error(
+                        verifyData.message ||
+                        verifyData.error ||
+                        "Payment verification failed."
+                    );
+                }
+
+                // Payment and booking successful
+                //window.location.href = "confirm.html";
+
+            } catch (error) {
+
+                console.error(
+                    "Payment verification error:",
+                    error
+                );
+
+                alert(
+                    "Payment was completed, but booking verification failed. Please contact support."
+                );
+            }
+        },
+
+        /*prefill: {
+
+            name: name.value.trim(),
+
+            email: email.value.trim(),
+
+            contact: phone.value.trim()
+        },*/
+
+        theme: {
+            color: "#0a84ff"
+        },
+
+        modal: {
+
+            ondismiss: function () {
+
+                console.log(
+                    "Razorpay payment window closed."
+                );
+            }
+        }
+    };
+
+    const razorpay = new Razorpay(options);
+
+    razorpay.open();
+});
+
+</script>
+</body>
+
+</html>
