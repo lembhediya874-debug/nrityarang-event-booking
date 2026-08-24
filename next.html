@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>seat selection page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<style>
+
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:#1b1b1b;
+      color:white;
+      padding:15px;
+      border-bottom:1px solid #444;
+    }
+
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .logo i{
+      color:#0a84ff;
+      font-size:24px;
+    }
+    
+    .main-container{
+      width: 90%;
+      max-width: 700px;
+      margin: 20px auto;
+      border: 1px solid #4a4a4a;
+      border-radius:25px ;
+      overflow: hidden;
+      background: #1f1f1f;
+    }
+
+    .hero{
+      text-align: center;
+      padding: 0px;
+      margin: 0;
+      color: white;
+    }
+
+    button{
+      width:100%;
+      padding:18px;
+      background:#0d47a1;
+      border:none;
+      border-radius:12px;
+      color:white;
+      font-size:22px;
+      cursor:pointer;
+      margin-top:20px;
+      transition: 0.3s;
+    }
+
+    button:hover{
+      background-color:deepskyblue;
+    }
+
+    footer{
+      text-align:center;
+      padding:10px;
+      border-top:1px solid #555;
+      margin-top:20px;
+      color: white;
+    } 
+
+    .seat-container {
+    flex: 1;
+    padding: 20px 12px;
+    align-items: center;
+    background: #1f1f1f;
+    overflow-x: auto;
+    overflow-y: auto;
+    width: 100%;
+}
+
+  .svg-wraper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 820px;
+    width: 820px;
+    margin: 0 auto;
+    }
+
+  svg circle.seat {
+    fill: #ffffff;
+    stroke: #0a84ff;
+    stroke-width: 1.6;
+    cursor: pointer;
+    transition: r 0.12s ease-in-out;
+  }
+
+  svg circle.seat:hover {
+    r: 9;
+  }
+
+  svg circle.seat.selected {
+    fill: #0a84ff;
+    stroke: #0a84ff;
+  }
+
+  svg circle.seat.booked {
+    fill: #555555;
+    stroke: #555555;
+    cursor: not-allowed;
+  }
+
+  svg text.seat-text {
+    font-size: 6px;
+    fill: #0a84ff;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+  }
+
+  svg circle.seat.selected + text.seat-text {
+    fill: #fff;
+  }
+
+  svg text.row-label {
+    font-size: 11px;
+    fill: #ffffff;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .stage-box {
+    width: 280px;
+    height: 46px;
+    border: 1px solid #777;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #ffffff;
+    margin: 40px 0 10px;
+    background: #2a2a2a;
+  }
+
+  svg#seatSvg {
+    width: 850px;
+    height: auto;
+    overflow: visible;
+    display: block;
+  }
+
+  .seat-container::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+
+  .seat-container::-webkit-scrollbar-track {
+    background: #333333;
+    border-radius: 4px;
+  }
+
+  .seat-container::-webkit-scrollbar-thumb {
+    background: #666666;
+    border-radius: 4px;
+  }
+
+  .seat-container::-webkit-scrollbar-thumb:hover {
+    background: #0a84ff;
+  }
+
+  .seat-controls {
+    padding: 15px 20px;
+    border-top: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.seat-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+#seatCountText {
+    font-size: 13px;
+    color: #999;
+}
+
+#totalSeats {
+    font-size: 13px;
+    color: white;
+    margin-top: 8px;
+}
+
+#totalSeats span {
+    color: #0a84ff;
+    font-weight: bold;
+}
+
+.booking-section {
+    padding: 0 20px 20px;
+}
+
+.book-btn {
+    width: 100%;
+    padding: 14px;
+    background: #0a84ff;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.book-btn:hover {
+    background: deepskyblue;
+}
+
+.book-btn:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+}
+
+#totalAmount {
+    font-size: 13px;
+    color: white;
+    margin-top: 5px;
+}
+
+.available-seats {
+    text-align: center;
+    min-width: 120px;
+}
+
+.available-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: white;
+}
+
+#availableSeats {
+    font-size: 22px;
+    font-weight: bold;
+    color: #0a84ff;
+}
+
+.seat.blocked {
+    fill: #555;
+    stroke: #555;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+</style>
+
+<body>
+
+    <div class="main-container">
+      <header class="header">
+
+        <div class="logo">
+          <i class="fa-solid fa-ticket"></i>
+        <h4>ticket booking website</h4>
+        </div>
+
+      <i class="fa-solid fa-bars menu"></i>
+    </header>
+
+     <section class="hero">
+        <h1>Select Seat</h1>
+    </section>
+    
+    <div class="seat-container">
+    <div class="svg-wraper">
+    <svg id="seatSvg" viewBox="0 0 850 650" style="min-width: 760px; height: auto;"></svg>
+    <div class="stage-box">STAGE</div>
+    </div>
+    </div>
+
+    <div class="seat-controls">
+
+    <div class="seat-info">
+        <div class="seat-title">Selected Seats</div>
+        <div id="seatCountText">Seat(s) None</div>
+        <div id="totalSeats">Total Seats:0</div>
+        <div id="totalAmount">Total Amount: ₹0</div>
+    </div>
+
+    <div class="available-seats">
+    <div class="available-title">Available Seats</div>
+    <div id="availableSeats">0</div>
+    </div>
+
+    </div>
+
+    <div class="booking-section">
+    <button id="bookBtn" class="book-btn">
+        Book Tickets
+    </button>
+    </div> 
+    
+    <!--temporary-->
+    <!--<button onclick="clearBookedSeats()">Clear Booked Seats</button>-->
+
+    <script>
+      const API_URL= "https://nrityarang-event-booking.onrender.com";
+      //const RAZORPAY_KEY_ID = "rzp_test_TQOBjcw7HjPfwN"
+
+  const rowSpecs = [
+    // TOP TIER
+    { label: "CC", left: 10, center: 18, right: 10 },
+    { label: "BB", left: 10, center: 19, right: 10 },
+    { label: "AA", left: 10, center: 18, right: 10 },
+    { label: "Z",  left: 10, center: 19, right: 10 },
+    { label: "Y",  left: 10, center: 18, right: 10 },
+    { label: "X",  left: 10, center: 19, right: 10 },
+    { label: "W",  left: 10, center: 18, right: 10 },
+    { label: "V",  left: 10, center: 19, right: 10 },
+
+    { type: "gap" },
+    { type: "gap" },
+    { type: "gap" },
+
+    // MIDDLE TIER
+    { label: "U", left: 12, center: 12, right: 12 },
+    { label: "T", left: 13, center: 13, right: 13 },
+    { label: "S", left: 13, center: 12, right: 13 },
+    { label: "R", left: 13, center: 13, right: 13 },
+    { label: "Q", left: 13, center: 12, right: 13 },
+    { label: "P", left: 13, center: 13, right: 13 },
+    { label: "O", left: 13, center: 12, right: 13 },
+    { label: "N", left: 13, center: 13, right: 13 },
+
+    { type: "gap" },
+    { type: "gap" },
+
+    // BOTTOM TIER
+    { label: "M", left: 13, center: 12, right: 13 },
+    { label: "L", left: 13, center: 13, right: 13 },
+    { label: "K", left: 13, center: 12, right: 13 },
+    { label: "J", left: 13, center: 13, right: 13 },
+    { label: "H", left: 13, center: 12, right: 13 },
+    { label: "G", left: 12, center: 13, right: 12 },
+    { label: "F", left: 12, center: 12, right: 11 },
+    { label: "E", left: 10, center: 13, right: 10 },
+    { label: "D", left: 9,  center: 12, right: 9 },
+    { label: "C", left: 9,  center: 13, right: 8 },
+    { label: "B", left: 8,  center: 12, right: 8 },
+    { label: "A", left: 7,  center: 13, right: 7 },
+
+  ];
+
+  const rowPrices = {
+    CC : 250,
+    BB : 250,
+    AA : 250,
+    Z : 250,
+    Y : 250,
+    X : 250,
+    W : 250,
+    V : 250,
+
+    U : 350,
+    T : 350,
+    S : 350,
+
+    R : 400,
+    Q : 400,
+    P : 400,
+    O : 400,
+    N : 400,
+
+    M : 450,
+    L : 450,
+    K : 450,
+    J : 450,
+
+    H : 500,
+    G : 500,
+    F : 500,
+    E : 500,
+    D : 500,
+
+    C : 0,
+    B : 0,
+    A : 0
+  }
+
+  const blockedRows = ["A", "B", "C"];
+
+  const STORAGE_KEY = "auditorium_exact_image_matching_v1";
+
+  /*let selectedSeats = [];
+  let bookedSeats = JSON.parse(
+    localStorage.getItem(STORAGE_KEY) || "[]"
+  );*/
+  let selectedSeats = [];
+  let bookedSeats = [];
+
+  const svg = document.getElementById("seatSvg");
+  const seatCountText = document.getElementById("seatCountText");
+  const availableSeats = document.getElementById("availableSeats");
+  const totalSeats = document.getElementById("totalSeats");
+  const bookBtn = document.getElementById("bookBtn");
+  const totalAmount = document.getElementById("totalAmount");
+
+  // =====================================================
+  // DRAW AUDITORIUM
+  // =====================================================
+
+  function drawAuditorium() {
+
+    svg.innerHTML = "";
+
+    let currentY = 24; // currentY +=24
+    
+// ==============================
+// VIEWBOX
+// ==============================
+
+    const LEFT_RIGHT_EDGE = 240;
+    const CENTER_RIGHT_EDGE = 570;
+    const RIGHT_RIGHT_EDGE = 760;
+
+    const seatSpacing = 16;
+
+
+    rowSpecs.forEach((row) => {
+
+      const balconyText = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "text"
+    );
+
+    balconyText.setAttribute("x", "425");
+    balconyText.setAttribute("y", "210");
+    balconyText.setAttribute("text-anchor", "middle");
+    balconyText.setAttribute("font-size", "20");
+    balconyText.setAttribute("font-family", "Arial");
+    balconyText.setAttribute("font-weight", "bold");
+    balconyText.setAttribute("fill", "white");
+
+    balconyText.textContent = "-----------------------------------------↑ BALCONY ↑------------------------------------------";
+
+    svg.appendChild(balconyText);
+
+    svg.setAttribute(
+      "viewBox",
+      `0 0 850 ${currentY + 20}`
+    )
+
+      // LEFT ROW LABEL
+
+      const leftLabel = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "text"
+      );
+
+      leftLabel.setAttribute("x", 25);
+      leftLabel.setAttribute("y", currentY);
+      leftLabel.setAttribute("class", "row-label");
+      leftLabel.textContent = row.label;
+
+      svg.appendChild(leftLabel);
+
+      // ---------------------------------------------------
+      // RIGHT ROW LABEL
+      // ---------------------------------------------------
+
+      const rightLabel = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "text"
+      );
+
+      rightLabel.setAttribute("x", 800);
+      rightLabel.setAttribute("y", currentY);
+      rightLabel.setAttribute("class", "row-label");
+      rightLabel.textContent = row.label;
+
+      svg.appendChild(rightLabel);
+
+      // ---------------------------------------------------
+      // SEAT NUMBER
+      // ---------------------------------------------------
+
+      let seatNumber = 1;
+
+      function drawBlock(startOrEnd, count, alignRight = true) {
+
+  if (count <= 0) return;
+
+  for (let i = 0; i < count; i++) {
+
+    let x;
+
+    if (alignRight) {
+      // RIGHT aligned
+      // Seats grow towards LEFT
+      x = startOrEnd - ((count - 1 - i) * seatSpacing);
+    } else {
+      // LEFT aligned
+      // Seats grow towards RIGHT
+      x = startOrEnd + (i * seatSpacing);
+    }
+
+    const id =
+      `${row.label}-${String(seatNumber).padStart(2, "0")}`;
+
+    const num = seatNumber;
+
+    const circle = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "circle"
+    );
+
+    circle.setAttribute("cx", x);
+    circle.setAttribute("cy", currentY);
+    circle.setAttribute("r", 6.5);
+
+    /*let stateClass = "seat";
+
+    if (bookedSeats.includes(id)) {
+      stateClass += " booked";
+    } 
+    else if (selectedSeats.includes(id)) {
+      stateClass += " selected";
+    }*/
+
+    let stateClass = "seat";
+
+    if (blockedRows.includes(row.label)) {
+    stateClass += " blocked";
+    }
+    else if (bookedSeats.includes(id)) {
+    stateClass += " booked";
+    } 
+    else if (selectedSeats.includes(id)) {
+    stateClass += " selected";
+    }
+
+    circle.setAttribute("class", stateClass);
+
+    const text = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "text"
+    );
+
+    text.setAttribute("x", x);
+    text.setAttribute("y", currentY);
+    text.setAttribute("class", "seat-text");
+    text.textContent = num;
+
+    circle.addEventListener("click", () => {
+
+      if (blockedRows.includes(row.label)) return;
+
+      if (bookedSeats.includes(id)) return;
+
+      if (selectedSeats.includes(id)) {
+        selectedSeats =
+          selectedSeats.filter(s => s !== id);
+      } 
+      else {
+        selectedSeats.push(id);
+      }
+
+      drawAuditorium();
+      updateUI();
+    });
+
+    svg.appendChild(circle);
+    svg.appendChild(text);
+
+    seatNumber++;
+  }
+}
+
+      // DRAW THREE BLOCKS
+      // LEFT BLOCK
+      drawBlock(
+        LEFT_RIGHT_EDGE,
+        row.left,
+        true 
+      );
+
+      //centre block
+      let centreEdge = CENTER_RIGHT_EDGE;
+      if(
+        ["U", "T", "S", "R", "Q", "P", "O", "N","M", "L", "K", "J", "H", "G", "F", "E", "D", "C", "B", "A"
+        ].includes(row.label)
+      ){
+        centreEdge = 500;
+      }
+
+      drawBlock(
+        centreEdge,
+        row.center,
+        true
+      );
+
+
+      // RIGHT BLOCK
+      if (["M", "L", "K", "J", "H", "G", "F", "E", "D", "C","B", "A"].includes(row.label)) {
+      drawBlock(
+        580,
+        row.right,
+        false
+      );
+      }
+      else{
+        drawBlock(
+          RIGHT_RIGHT_EDGE,
+          row.right,
+          true
+        );
+      }
+      
+      currentY += 21;
+
+    });
+
+    svg.setAttribute(
+      "viewBox",
+      `0 0 850 ${currentY + 20}`
+    );
+
+  }
+    // =====================================================
+    // SVG SIZE
+    // =====================================================
+
+    function updateUI() {
+
+    const sortedSeats = [...selectedSeats].sort();
+
+    // Selected seats
+    seatCountText.textContent =
+        `Seat(s) ${
+            sortedSeats.length
+                ? sortedSeats.join(", ")
+                : "None"
+        }`;
+
+    // Total seats currently selected
+    totalSeats.innerHTML =
+        `Total Seats: <span>${selectedSeats.length}</span>`;
+
+    // Total number of seats in the entire hall
+    const totalHallSeats = rowSpecs.reduce((total, row) => {
+
+    if (row.type === "gap") {
+        return total;
+    }
+
+    if (blockedRows.includes(row.label)) {
+        return total;
+    }
+
+    return total + row.left + row.center + row.right;
+
+    }, 0);
+
+    // Available seats = total hall seats - already booked seats
+    const availableCount =
+        totalHallSeats - bookedSeats.length;
+
+    availableSeats.textContent = availableCount;
+
+    //total amount
+    const totalAmountValue = selectedSeats.reduce((total, seat) => {
+
+    const row = seat.split("-")[0];
+
+    return total + rowPrices[row];
+
+    }, 0);
+
+    totalAmount.innerHTML =
+        `Total Amount: <span>₹${totalAmountValue.toLocaleString("en-IN")}</span>`;
+
+    // Enable/disable Book Tickets button
+    bookBtn.disabled = selectedSeats.length === 0;
+  }
+
+// =====================================================
+// LOAD BOOKED SEATS FROM BACKEND
+// =====================================================
+ 
+  async function loadBookedSeats() {
+    try {
+        const response = await fetch(
+            `${API_URL}/api/booked-seats`
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to load booked seats");
+        }
+
+        const data = await response.json();
+
+        console.log("Booked seats:", data);
+
+        bookedSeats = data.bookedSeats || [];
+
+        drawAuditorium();
+        updateUI();
+
+    } catch (error) {
+        console.error("Error loading booked seats:", error);
+
+        bookedSeats = [];
+
+        drawAuditorium();
+        updateUI();
+    }
+  }
+
+  // =====================================================
+  // BOOK BUTTON
+  // ====================================================
+
+  bookBtn.addEventListener("click", async () => {
+
+    if (selectedSeats.length === 0) {
+        alert("Please select at least one seat.");
+        return;
+    }
+
+    try {
+
+        bookBtn.disabled = true;
+        bookBtn.textContent = "Creating Order...";
+
+        // Send selected seats to backend
+        const response = await fetch(`${API_URL}/api/create-order`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                seats: selectedSeats
+            })
+        });
+
+        const data = await response.json();
+
+        console.log("Create order response:", data);
+
+        if (!response.ok) {
+            throw new Error(data.error || "Unable to create order");
+        }
+
+        // Razorpay order ID
+        const orderId = data.id;
+
+        // Price calculated by backend
+        const total = data.calculatedPrice;
+
+        if (!orderId) {
+            throw new Error("Razorpay Order ID was not received.");
+        }
+
+        // Send information to payment page
+        window.location.href =
+            `payment.html?seats=${encodeURIComponent(selectedSeats.join(",")
+            )}` +
+            `&orderId=${encodeURIComponent(orderId)}` +
+            `&total=${encodeURIComponent(total)}`;
+
+    } catch (error) {
+
+        console.error("Create order error:", error);
+
+        alert(error.message);
+
+        bookBtn.disabled = false;
+        bookBtn.textContent = "Book Tickets";
+    }
+});
+
+
+  drawAuditorium();
+  updateUI();
+  loadBookedSeats();
+
+</script>
+    
+    <footer>
+        <p>Tickets Cancellation not allowed</p>
+    </footer>
+
+</div>
+</body>
+    
+</html>
