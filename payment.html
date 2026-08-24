@@ -646,14 +646,13 @@ footer {
                     result
                 );
 
-                if (!verifyResponse.ok ||
-                    !resultData.success) {
+                if (!verifyResponse.ok || !result.success) {
 
                     throw new Error(
-                        verifyData.message ||
-                        verifyData.error ||
+                        result.message ||
+                        result.error ||
                         "Payment verification failed."
-                    );
+                );
                 }
 
                 // Payment and booking successful
