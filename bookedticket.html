@@ -197,11 +197,11 @@ if (!savedData) {
     document.getElementById("ticketSeats").textContent =
         ticket.seats.join(", ");
 
-    //document.getElementById("ticketPhone").textContent =
-        //ticket.phone;
+    document.getElementById("ticketPhone").textContent =
+        ticket.phone;
 
-    //document.getElementById("ticketAltPhone").textContent =
-        //ticket.altPhone;
+    document.getElementById("ticketAltPhone").textContent =
+        ticket.altPhone;
 
     document.getElementById("ticketBranch").textContent =
         ticket.branch;
@@ -222,6 +222,10 @@ Booking ID: ${ticket.bookingId}
 Name: ${ticket.name}
 
 Seats: ${ticket.seats.join(", ")}
+
+Phone: ${ticket.phone}
+
+Alternate Phone: ${ticket.altPhone}
 
 Branch: ${ticket.branch}
 
