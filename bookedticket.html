@@ -197,11 +197,11 @@ if (!savedData) {
     document.getElementById("ticketSeats").textContent =
         ticket.seats.join(", ");
 
-    document.getElementById("ticketPhone").textContent =
-        ticket.phone;
+    //document.getElementById("ticketPhone").textContent =
+        //ticket.phone;
 
-    document.getElementById("ticketAltPhone").textContent =
-        ticket.altPhone;
+    //document.getElementById("ticketAltPhone").textContent =
+        //ticket.altPhone;
 
     document.getElementById("ticketBranch").textContent =
         ticket.branch;
@@ -223,10 +223,6 @@ Name: ${ticket.name}
 
 Seats: ${ticket.seats.join(", ")}
 
-Phone: ${ticket.phone}
-
-Alternate Phone: ${ticket.altPhone}
-
 Branch: ${ticket.branch}
 
 Date: 6 September 2026
@@ -237,11 +233,6 @@ Hall: Prabodhankar Thackeray Auditorium
 
 Amount: ₹${Number(ticket.total).toLocaleString("en-IN")}
 `;
-
-
-    // -----------------------------
-    // GENERATE QR CODE
-    // -----------------------------
 
     const qrURL =
         "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="
