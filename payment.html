@@ -560,6 +560,7 @@ footer {
         valid = false;
     }
 
+    const altPhonePattern = /^[6-9]\d{9}$/;
     if (
     altPhone.value.trim() !== "" &&
     !altPhonePattern.test(altPhone.value.trim())
