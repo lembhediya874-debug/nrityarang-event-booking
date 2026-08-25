@@ -109,12 +109,12 @@ button:hover{
 <div class="details">
 
 <div class="booking">
-Booking ID :kd1234 
+    Booking ID : <span id="bookingId">-</span>
 </div>
 
 <div class="row">
-<span class="label">Name</span>
-<span class="value"></span>
+    <span class="label">Name</span>
+    <span class="value" id="ticketName"></span>
 </div>
 
 <div class="row">
@@ -133,17 +133,37 @@ Booking ID :kd1234
 </div>
 
 <div class="row">
-<span class="label">Seat</span>
-<span class="value"></span>
+    <span class="label">Seat</span>
+    <span class="value" id="ticketSeats"></span>
 </div>
 
 <div class="row">
-<span class="label">Amount</span>
-<span class="value">₹1000</span>
+    <span class="label">Phone</span>
+    <span class="value" id="ticketPhone"></span>
 </div>
 
+<div class="row">
+    <span class="label">Alternate Phone</span>
+    <span class="value" id="ticketAltPhone"></span>
+</div>
+
+<div class="row">
+    <span class="label">Branch</span>
+    <span class="value" id="ticketBranch"></span>
+</div>
+
+<div class="row">
+    <span class="label">Amount</span>
+    <span class="value" id="ticketAmount"></span>
+</div>
+
+<!--<div class="row">
+<span class="label">Amount</span>
+<span class="value">₹1000</span>
+</div>-->
+
 <div class="qr">
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=kd1234" alt="QR Code">
+    <img id="ticketQR" src="" alt="QR Code">
 </div>
 
 <button onclick="window.print()">Print Ticket</button>
@@ -151,6 +171,87 @@ Booking ID :kd1234
 </div>
 
 </div>
+
+<script>
+
+const savedData = localStorage.getItem("ticketData");
+
+if (!savedData) {
+
+    alert("Ticket information not found.");
+    
+} else {
+
+    const ticket = JSON.parse(savedData);
+
+    // -----------------------------
+    // DISPLAY TICKET DETAILS
+    // -----------------------------
+
+    document.getElementById("bookingId").textContent =
+        ticket.bookingId;
+
+    document.getElementById("ticketName").textContent =
+        ticket.name;
+
+    document.getElementById("ticketSeats").textContent =
+        ticket.seats.join(", ");
+
+    document.getElementById("ticketPhone").textContent =
+        ticket.phone;
+
+    document.getElementById("ticketAltPhone").textContent =
+        ticket.altPhone;
+
+    document.getElementById("ticketBranch").textContent =
+        ticket.branch;
+
+    document.getElementById("ticketAmount").textContent =
+        "₹" + Number(ticket.total).toLocaleString("en-IN");
+
+
+    // -----------------------------
+    // CREATE QR DATA
+    // -----------------------------
+
+    const qrData = `
+Nrityanand Kathak Vidyalay
+
+Booking ID: ${ticket.bookingId}
+
+Name: ${ticket.name}
+
+Seats: ${ticket.seats.join(", ")}
+
+Phone: ${ticket.phone}
+
+Alternate Phone: ${ticket.altPhone}
+
+Branch: ${ticket.branch}
+
+Date: 6 September 2026
+
+Time: 7:00 PM
+
+Hall: Prabodhankar Thackeray Auditorium
+
+Amount: ₹${Number(ticket.total).toLocaleString("en-IN")}
+`;
+
+
+    // -----------------------------
+    // GENERATE QR CODE
+    // -----------------------------
+
+    const qrURL =
+        "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="
+        + encodeURIComponent(qrData);
+
+    document.getElementById("ticketQR").src = qrURL;
+
+}
+
+</script>
 
 </body>
 </html>

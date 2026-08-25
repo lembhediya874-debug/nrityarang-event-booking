@@ -694,8 +694,27 @@ footer {
                         "Payment verification failed."
                 );
                 }
-                console.log("Payment and Booking Succesful!!");
-                // Payment and booking successful
+                console.log("Payment and Booking Successful!!");
+
+                // Get booking ID returned by backend
+                const bookingId = result.booking?.booking_id || "N/A";
+
+                // Save ticket details
+                const ticketData = {
+                    bookingId: bookingId,
+                    name: name.value.trim(),
+                    email: email.value.trim(),
+                    phone: phone.value.trim(),
+                    altPhone: altPhone.value.trim(),
+                    branch: branch.value,
+                    seats: seats,
+                    total: total
+                };
+
+                // Store details for bookedticket.html
+                localStorage.setItem("ticketData", JSON.stringify(ticketData));
+
+                // Open ticket page
                 window.location.href = "bookedticket.html";
 
             } catch (error) {
