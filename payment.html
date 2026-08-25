@@ -455,6 +455,46 @@ footer {
 
     const orderId = params.get("orderId"); /*|| ""*/
 
+    let paymentCompleted = false;
+
+    function releaseSeatHold() {
+
+        if (!orderId || paymentCompleted) {
+        return;
+        }
+
+        fetch(`${API_URL}/api/release-seats`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            keepalive: true,
+            body: JSON.stringify({
+                order_id: orderId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Seat hold release response:", data);
+        })
+        .catch(error => {
+            console.error("Failed to release seat hold:", error);
+        });
+    }
+
+    // Detect browser Back button
+    history.pushState(null, "", window.location.href);
+
+    window.addEventListener("popstate", function () {
+
+        console.log("User pressed Back button.");
+
+        releaseSeatHold();
+
+    // Go back to previous page
+        history.back();
+    });
+
     // Display selected seats
     document.getElementById("seatNumbers")
         .textContent =
@@ -692,9 +732,14 @@ footer {
                         result.message ||
                         result.error ||
                         "Payment verification failed."
-                );
+                    );
                 }
+
+                paymentCompleted = true;
+
                 console.log("Payment and Booking Successful!!");
+
+                //window.location.href = "bookedticket.html";
 
                 // Get booking ID returned by backend
                 const bookingId = result.booking?.booking_id || "N/A";
@@ -732,42 +777,12 @@ footer {
 
         theme: {
             color: "#0a84ff"
-        },
-
-        modal: {
-
-            ondismiss: async function () {
-
-    console.log("Razorpay payment window closed.");
-
-    try {
-
-        await fetch(`${API_URL}/api/release-seats`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                order_id: orderId
-            })
-        });
-
-        console.log("Held seats released.");
-
-    } catch (error) {
-
-        console.error(
-            "Failed to release seats:",
-            error
-        );
-    }
-}
         }
     };
 
-    const razorpay = new Razorpay(options);
+    const razorpayInstance = new Razorpay(options);
 
-    razorpay.open();
+    razorpayInstance.open();
 });
 
 </script>
