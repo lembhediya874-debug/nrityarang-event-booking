@@ -417,12 +417,10 @@ console.log("User Session ID:", userSessionId);
 
   const STORAGE_KEY = "auditorium_exact_image_matching_v1";
 
-  /*let selectedSeats = [];
-  let bookedSeats = JSON.parse(
-    localStorage.getItem(STORAGE_KEY) || "[]"
-  );*/
   let selectedSeats = [];
-  let bookedSeats = [];
+  let bookedSeats = JSON.parse(
+    localStorage.getItem("bookedSeatsCache") || "[]"
+  );
 
   const svg = document.getElementById("seatSvg");
   const seatCountText = document.getElementById("seatCountText");
@@ -706,6 +704,7 @@ console.log("User Session ID:", userSessionId);
 // =====================================================
  
   async function loadBookedSeats() {
+
     try {
 
         const response = await fetch(
@@ -724,15 +723,21 @@ console.log("User Session ID:", userSessionId);
 
         const newBookedSeats = data.bookedSeats || [];
 
-        console.log("Booked seats received:", newBookedSeats);
+        console.log("Latest booked seats from backend:", newBookedSeats);
 
-        // Save latest booked seats
+        // Update booked seats
         bookedSeats = newBookedSeats;
 
-        // Update only the seat colors
+        // Save latest seats locally
+        localStorage.setItem(
+            "bookedSeatsCache",
+            JSON.stringify(bookedSeats)
+        );
+
+        // Update seat display
         updateBookedSeatDisplay();
 
-        // Update available-seat count
+        // Update available count
         updateUI();
 
     } catch (error) {
@@ -741,14 +746,23 @@ console.log("User Session ID:", userSessionId);
             "Error loading booked seats:",
             error
         );
+
+        // Keep using cached seats if backend is temporarily unavailable
+        console.log(
+            "Using previously cached booked seats:",
+            bookedSeats
+        );
+
+        updateBookedSeatDisplay();
+        updateUI();
     }
 }
 
 // Automatically check for updated booked seats
 // every 5 seconds
-setInterval(() => {
+/*setInterval(() => {
     loadBookedSeats();
-}, 5000);
+}, 5000);*/
 
       function updateBookedSeatDisplay() {
 
