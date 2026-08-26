@@ -265,6 +265,12 @@
     opacity: 0.6;
 }
 
+svg circle.seat.held {
+    fill: #f0ad4e;
+    stroke: #f0ad4e;
+    cursor: not-allowed;
+}
+
 </style>
 
 <body>
@@ -418,6 +424,12 @@ console.log("User Session ID:", userSessionId);
   let bookedSeats = JSON.parse(
     localStorage.getItem("bookedSeatsCache") || "[]"
   );
+  let heldSeats = [];
+
+  function isSeatUnavailable(seatId) {
+    return bookedSeats.includes(seatId) ||
+           heldSeats.includes(seatId);
+}
 
   const svg = document.getElementById("seatSvg");
   const seatCountText = document.getElementById("seatCountText");
@@ -561,7 +573,7 @@ console.log("User Session ID:", userSessionId);
 
       if (blockedRows.includes(row.label)) return;
 
-      if (bookedSeats.includes(id)) return;
+      if (isSeatUnavailable(id)) return;
 
       if (selectedSeats.includes(id)) {
         selectedSeats =
