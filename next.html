@@ -312,9 +312,6 @@
         Book Tickets
     </button>
     </div> 
-    
-    <!--temporary-->
-    <!--<button onclick="clearBookedSeats()">Clear Booked Seats</button>-->
 
     <script>
       const API_URL = "https://nrityarang-event-booking.onrender.com";
@@ -429,9 +426,7 @@ console.log("User Session ID:", userSessionId);
   const bookBtn = document.getElementById("bookBtn");
   const totalAmount = document.getElementById("totalAmount");
 
-  // =====================================================
   // DRAW AUDITORIUM
-  // =====================================================
 
   function drawAuditorium() {
 
@@ -439,9 +434,7 @@ console.log("User Session ID:", userSessionId);
 
     let currentY = 24; // currentY +=24
     
-// ==============================
 // VIEWBOX
-// ==============================
 
     const LEFT_RIGHT_EDGE = 240;
     const CENTER_RIGHT_EDGE = 570;
@@ -488,9 +481,7 @@ console.log("User Session ID:", userSessionId);
 
       svg.appendChild(leftLabel);
 
-      // ---------------------------------------------------
       // RIGHT ROW LABEL
-      // ---------------------------------------------------
 
       const rightLabel = document.createElementNS(
         "http://www.w3.org/2000/svg",
@@ -504,7 +495,6 @@ console.log("User Session ID:", userSessionId);
 
       svg.appendChild(rightLabel);
 
-      // ---------------------------------------------------
       // SEAT NUMBER
       // ---------------------------------------------------
 
@@ -699,9 +689,7 @@ console.log("User Session ID:", userSessionId);
     bookBtn.disabled = selectedSeats.length === 0;
   }
 
-// =====================================================
 // LOAD BOOKED SEATS FROM BACKEND
-// =====================================================
  
   async function loadBookedSeats() {
 
@@ -757,12 +745,6 @@ console.log("User Session ID:", userSessionId);
         updateUI();
     }
 }
-
-// Automatically check for updated booked seats
-// every 5 seconds
-/*setInterval(() => {
-    loadBookedSeats();
-}, 5000);*/
 
       function updateBookedSeatDisplay() {
 
@@ -917,12 +899,9 @@ console.log("User Session ID:", userSessionId);
     }
 });
 
-
-  // Draw the hall immediately
 drawAuditorium();
 updateUI();
 
-// Load booked seats in the background
 loadBookedSeats();
 
 </script>
