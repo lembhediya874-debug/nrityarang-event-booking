@@ -719,8 +719,7 @@ try {
   }
 
 // LOAD BOOKED SEATS FROM BACKEND
- 
-  async function loadBookedSeats() {
+async function loadBookedSeats() {
 
     try {
 
@@ -733,36 +732,50 @@ try {
         );
 
         if (!response.ok) {
-            throw new Error("Failed to load booked seats");
+            throw new Error(
+                `Server returned ${response.status}`
+            );
         }
 
         const data = await response.json();
 
-        // Latest CONFIRMED seats
-        const newBookedSeats = data.bookedSeats || [];
+        console.log(
+            "Latest booked seats:",
+            data.bookedSeats
+        );
 
-        // Latest temporary HOLD seats
-        const newHeldSeats = data.heldSeats || [];
+        console.log(
+            "Latest held seats:",
+            data.heldSeats
+        );
 
-        console.log("Confirmed seats:", newBookedSeats);
-        console.log("Held seats:", newHeldSeats);
+        // ==========================================
+        // UPDATE CONFIRMED SEATS
+        // ==========================================
 
-        // Save confirmed seats
-        bookedSeats = newBookedSeats;
+        bookedSeats = data.bookedSeats || [];
 
-        // HOLD seats should always come from backend
-        heldSeats = newHeldSeats;
+        // ==========================================
+        // UPDATE HOLD SEATS
+        // ==========================================
 
-        // Cache only CONFIRMED seats
+        heldSeats = data.heldSeats || [];
+
+        // ==========================================
+        // SAVE CONFIRMED SEATS TO CACHE
+        // ==========================================
+
         localStorage.setItem(
             BOOKED_SEATS_CACHE_KEY,
             JSON.stringify(bookedSeats)
         );
 
-        // Update seat display
+        // ==========================================
+        // UPDATE DISPLAY
+        // ==========================================
+
         updateBookedSeatDisplay();
 
-        // Update available count
         updateUI();
 
     } catch (error) {
@@ -774,6 +787,7 @@ try {
 
         // Keep cached confirmed seats
         updateBookedSeatDisplay();
+
         updateUI();
     }
 }
@@ -783,7 +797,7 @@ setInterval(() => {
     loadBookedSeats();
 }, 3000);
 
-      function updateBookedSeatDisplay() {
+function updateBookedSeatDisplay() {
 
     const allSeats = document.querySelectorAll(
         "circle.seat"
@@ -803,61 +817,55 @@ setInterval(() => {
             return;
         }
 
-        const isBooked =
-            bookedSeats.includes(seatId);
+        // Remove old state classes
+        circle.classList.remove(
+            "booked",
+            "held",
+            "selected"
+        );
 
-        const isHeld =
-            heldSeats.includes(seatId);
+        // ==========================================
+        // CONFIRMED
+        // ==========================================
 
-        // -----------------------------
-        // CONFIRMED BOOKED SEAT
-        // -----------------------------
-
-        if (isBooked) {
+        if (bookedSeats.includes(seatId)) {
 
             circle.classList.add("booked");
-            circle.classList.remove("held");
 
             // Remove from local selection
-            if (selectedSeats.includes(seatId)) {
-
-                selectedSeats =
-                    selectedSeats.filter(
-                        seat => seat !== seatId
-                    );
-            }
+            selectedSeats =
+                selectedSeats.filter(
+                    seat => seat !== seatId
+                );
 
         }
 
-        // -----------------------------
-        // TEMPORARILY HELD SEAT
-        // -----------------------------
+        // ==========================================
+        // TEMPORARY HOLD
+        // ==========================================
 
-        else if (isHeld) {
+        else if (heldSeats.includes(seatId)) {
 
             circle.classList.add("held");
-            circle.classList.remove("booked");
 
             // Remove from local selection
-            if (selectedSeats.includes(seatId)) {
-
-                selectedSeats =
-                    selectedSeats.filter(
-                        seat => seat !== seatId
-                    );
-            }
+            selectedSeats =
+                selectedSeats.filter(
+                    seat => seat !== seatId
+                );
 
         }
 
-        // -----------------------------
-        // AVAILABLE SEAT
-        // -----------------------------
+        // ==========================================
+        // LOCALLY SELECTED
+        // ==========================================
 
-        else {
+        else if (selectedSeats.includes(seatId)) {
 
-            circle.classList.remove("booked");
-            circle.classList.remove("held");
+            circle.classList.add("selected");
+
         }
+
     });
 
     updateUI();
