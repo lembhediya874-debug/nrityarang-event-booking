@@ -317,8 +317,21 @@
     <!--<button onclick="clearBookedSeats()">Clear Booked Seats</button>-->
 
     <script>
-      const API_URL= "https://nrityarang-event-booking.onrender.com";
-      //const RAZORPAY_KEY_ID = "rzp_test_TQOBjcw7HjPfwN"
+      const API_URL = "https://nrityarang-event-booking.onrender.com";
+
+      // Create or retrieve the user's session ID
+      let userSessionId = localStorage.getItem("userSessionId");
+
+      if (!userSessionId) {
+        userSessionId = crypto.randomUUID();
+
+        localStorage.setItem(
+          "userSessionId",
+          userSessionId
+        );
+      }
+
+console.log("User Session ID:", userSessionId);
 
   const rowSpecs = [
     // TOP TIER
@@ -531,15 +544,6 @@
     circle.setAttribute("cy", currentY);
     circle.setAttribute("r", 6.5);
 
-    /*let stateClass = "seat";
-
-    if (bookedSeats.includes(id)) {
-      stateClass += " booked";
-    } 
-    else if (selectedSeats.includes(id)) {
-      stateClass += " selected";
-    }*/
-
     let stateClass = "seat";
 
     if (blockedRows.includes(row.label)) {
@@ -729,6 +733,42 @@
     }
   }
 
+  async function releaseSeatHold(orderId) {
+
+    if (!orderId) {
+        console.log("No order ID found. Nothing to release.");
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/release-seats`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                keepalive: true,
+                body: JSON.stringify({
+                    order_id: orderId
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        console.log("Release seat response:", data);
+
+    } catch (error) {
+
+        console.error(
+            "Failed to release seats:",
+            error
+        );
+    }
+}
+
   // =====================================================
   // BOOK BUTTON
   // ====================================================
@@ -745,16 +785,21 @@
         bookBtn.disabled = true;
         bookBtn.textContent = "Creating Order...";
 
-        // Send selected seats to backend
-        const response = await fetch(`${API_URL}/api/create-order`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                seats: selectedSeats
-            })
-        });
+       const response = await fetch(
+    `${API_URL}/api/create-order`,
+    {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            seats: selectedSeats,
+            session_id: userSessionId
+        })
+    }
+  );
 
         const data = await response.json();
 
@@ -806,4 +851,3 @@
 </div>
 </body>
     
-</html>

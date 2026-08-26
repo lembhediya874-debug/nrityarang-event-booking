@@ -491,9 +491,9 @@ footer {
 
         releaseSeatHold();
 
-    // Go back to previous page
-        history.back();
-    });
+        // Return to the previous page
+        window.location.href = document.referrer || "index.html";
+});
 
     // Display selected seats
     document.getElementById("seatNumbers")
