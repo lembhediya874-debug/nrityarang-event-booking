@@ -557,6 +557,7 @@ console.log("User Session ID:", userSessionId);
     }
 
     circle.setAttribute("class", stateClass);
+    circle.setAttribute("data-seat-id", id);
 
     const text = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -706,8 +707,13 @@ console.log("User Session ID:", userSessionId);
  
   async function loadBookedSeats() {
     try {
+
         const response = await fetch(
-            `${API_URL}/api/booked-seats`
+            `${API_URL}/api/booked-seats`,
+            {
+                method: "GET",
+                cache: "no-store"
+            }
         );
 
         if (!response.ok) {
@@ -716,22 +722,82 @@ console.log("User Session ID:", userSessionId);
 
         const data = await response.json();
 
-        console.log("Booked seats:", data);
+        const newBookedSeats = data.bookedSeats || [];
 
-        bookedSeats = data.bookedSeats || [];
+        console.log("Booked seats received:", newBookedSeats);
 
-        drawAuditorium();
+        // Save latest booked seats
+        bookedSeats = newBookedSeats;
+
+        // Update only the seat colors
+        updateBookedSeatDisplay();
+
+        // Update available-seat count
         updateUI();
 
     } catch (error) {
-        console.error("Error loading booked seats:", error);
 
-        bookedSeats = [];
-
-        drawAuditorium();
-        updateUI();
+        console.error(
+            "Error loading booked seats:",
+            error
+        );
     }
-  }
+}
+
+// Automatically check for updated booked seats
+// every 5 seconds
+setInterval(() => {
+    loadBookedSeats();
+}, 5000);
+
+      function updateBookedSeatDisplay() {
+
+    // Get every seat drawn in the SVG
+    const allSeats = document.querySelectorAll(
+        "circle.seat"
+    );
+
+    allSeats.forEach(circle => {
+
+        const seatId =
+            circle.getAttribute("data-seat-id");
+
+        if (!seatId) return;
+
+        // Do not change blocked seats
+        if (
+            blockedRows.includes(
+                seatId.split("-")[0]
+            )
+        ) {
+            return;
+        }
+
+        if (bookedSeats.includes(seatId)) {
+
+            // Seat is booked
+            circle.classList.add("booked");
+
+            // If somehow selected locally,
+            // remove it from selection
+            if (selectedSeats.includes(seatId)) {
+
+                selectedSeats =
+                    selectedSeats.filter(
+                        seat => seat !== seatId
+                    );
+            }
+
+        } else {
+
+            // Seat is no longer booked
+            circle.classList.remove("booked");
+        }
+    });
+
+    // Update selected-seat display
+    updateUI();
+}
 
   async function releaseSeatHold(orderId) {
 
@@ -838,9 +904,12 @@ console.log("User Session ID:", userSessionId);
 });
 
 
-  drawAuditorium();
-  updateUI();
-  loadBookedSeats();
+  // Draw the hall immediately
+drawAuditorium();
+updateUI();
+
+// Load booked seats in the background
+loadBookedSeats();
 
 </script>
     
