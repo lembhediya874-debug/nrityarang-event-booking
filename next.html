@@ -1019,8 +1019,8 @@ bookBtn.addEventListener("click", async () => {
                 },
 
                 body: JSON.stringify({
-                    seats: selectedSeats,
-                    session_id: userSessionId
+                    //seats: selectedSeats,
+                    session_id: localStorage.getItem("userSessionId")
                 })
             }
         );
