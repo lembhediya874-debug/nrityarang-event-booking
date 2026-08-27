@@ -919,14 +919,10 @@ bookBtn.addEventListener("click", async () => {
 
     try {
 
-        // Disable button while checking
         bookBtn.disabled = true;
         bookBtn.textContent = "Checking seats...";
 
-        // ==========================================
-        // GET LATEST SEAT STATUS FROM BACKEND
-        // ==========================================
-
+        // Get latest seat status
         const seatResponse = await fetch(
             `${API_URL}/api/booked-seats`,
             {
@@ -941,51 +937,29 @@ bookBtn.addEventListener("click", async () => {
 
         const seatData = await seatResponse.json();
 
-        const latestBookedSeats =
-            seatData.bookedSeats || [];
+        bookedSeats = seatData.bookedSeats || [];
+        heldSeats = seatData.heldSeats || [];
 
-        const latestHeldSeats =
-            seatData.heldSeats || [];
-
-        // ==========================================
-        // UPDATE LOCAL SEAT DATA
-        // ==========================================
-
-        bookedSeats = latestBookedSeats;
-        heldSeats = latestHeldSeats;
-
-        // Update cache
+        // Save confirmed seats
         localStorage.setItem(
             BOOKED_SEATS_CACHE_KEY,
             JSON.stringify(bookedSeats)
         );
 
-        // ==========================================
-        // CHECK SELECTED SEATS
-        // ==========================================
-
+        // Check whether selected seats became unavailable
         const unavailableSelectedSeats =
             selectedSeats.filter(seat =>
                 bookedSeats.includes(seat) ||
                 heldSeats.includes(seat)
             );
 
-        // ==========================================
-        // SOMEONE ELSE BOOKED / HELD A SEAT
-        // ==========================================
-
         if (unavailableSelectedSeats.length > 0) {
 
-            // Remove unavailable seats from selection
-            selectedSeats =
-                selectedSeats.filter(seat =>
-                    !unavailableSelectedSeats.includes(seat)
-                );
+            selectedSeats = selectedSeats.filter(
+                seat => !unavailableSelectedSeats.includes(seat)
+            );
 
-            // Redraw hall
             drawAuditorium();
-
-            // Update information
             updateUI();
 
             alert(
@@ -994,17 +968,14 @@ bookBtn.addEventListener("click", async () => {
                 "\n\nPlease select different seats."
             );
 
-            bookBtn.disabled =
-                selectedSeats.length === 0;
-
-            bookBtn.textContent =
-                "Book Tickets";
+            bookBtn.disabled = selectedSeats.length === 0;
+            bookBtn.textContent = "Book Tickets";
 
             return;
         }
 
         // ==========================================
-        // ALL SELECTED SEATS ARE AVAILABLE
+        // CREATE RAZORPAY ORDER
         // ==========================================
 
         bookBtn.textContent = "Creating Order...";
@@ -1019,33 +990,23 @@ bookBtn.addEventListener("click", async () => {
                 },
 
                 body: JSON.stringify({
-                    //seats: selectedSeats,
-                    session_id: localStorage.getItem("userSessionId")
+                    seats: selectedSeats,
+                    session_id: userSessionId
                 })
             }
         );
 
         const data = await response.json();
 
-        console.log(
-            "Create order response:",
-            data
-        );
+        console.log("Create order response:", data);
 
         if (!response.ok) {
-
             throw new Error(
-                data.error ||
-                "Unable to create order"
+                data.error || "Unable to create order"
             );
         }
 
-        // ==========================================
-        // RAZORPAY ORDER
-        // ==========================================
-
         const orderId = data.id;
-
         const total = data.calculatedPrice;
 
         if (!orderId) {
@@ -1059,31 +1020,20 @@ bookBtn.addEventListener("click", async () => {
         // ==========================================
 
         window.location.href =
-            `payment.html?seats=${
-                encodeURIComponent(
-                    selectedSeats.join(",")
-                )
-            }` +
-            `&orderId=${
-                encodeURIComponent(orderId)
-            }` +
-            `&total=${
-                encodeURIComponent(total)
-            }`;
+            `payment.html?seats=${encodeURIComponent(
+                selectedSeats.join(",")
+            )}` +
+            `&orderId=${encodeURIComponent(orderId)}` +
+            `&total=${encodeURIComponent(total)}`;
 
     } catch (error) {
 
-        console.error(
-            "Create order error:",
-            error
-        );
+        console.error("Create order error:", error);
 
         alert(error.message);
 
         bookBtn.disabled = false;
-
-        bookBtn.textContent =
-            "Book Tickets";
+        bookBtn.textContent = "Book Tickets";
     }
 });
 
@@ -1101,3 +1051,4 @@ loadBookedSeats();
 </div>
 </body>
     
+</html>
