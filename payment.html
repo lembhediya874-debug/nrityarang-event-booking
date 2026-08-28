@@ -290,6 +290,32 @@ footer {
     border: 1px solid #ff4d6d !important;
 }
 
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 18px;
+    background: #f24e6c;
+    color: white;
+
+    text-decoration: none;
+    border-radius: 8px;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: #d93655;
+}
+
 </style>
 
 <body>
@@ -306,6 +332,11 @@ footer {
         
       <i class="fa-solid fa-bars menu"></i>
     </header>
+
+    <a href="next.html" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+    Back
+    </a>
 
     <section class="hero">
         <h1>Payment details</h1>
