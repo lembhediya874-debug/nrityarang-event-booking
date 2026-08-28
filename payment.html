@@ -67,25 +67,6 @@ body {
     font-size: 20px;
     color: #ddd;
 }
-
-/* BACK BUTTON */
-
-.back {
-    display: block;
-    color: #777;
-    margin: 20px 25px 10px;
-    font-size: 15px;
-    text-decoration: none;
-}
-
-.back i {
-    margin-right: 8px;
-}
-
-.back:hover {
-    color: #7b2cbf;
-}
-
 /* HERO */
 
 .hero {
@@ -290,27 +271,42 @@ footer {
     border: 1px solid #ff4d6d !important;
 }
 
+.payment-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+
+    padding: 10px 25px 20px;
+}
+
+.payment-header h1 {
+    grid-column: 2;
+    font-size: 40px;
+    text-align: center;
+    white-space: nowrap;
+}
+
 .back-btn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
+    grid-column: 1;
 
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+
     color: white;
-
     text-decoration: none;
-    border-radius: 8px;
 
-    font-size: 16px;
-    font-weight: 600;
-
-    transition: 0.3s;
-
-    padding-top: 50px;
+    font-size: 18px;
+    font-weight: 500;
 }
 
+.back-btn:hover {
+    color: #0a84ff;
+}
+
+.back-btn i {
+    font-size: 20px;
+}
 
 </style>
 
@@ -329,14 +325,14 @@ footer {
       <i class="fa-solid fa-bars menu"></i>
     </header>
 
-    <section class="hero">
+    <section class="payment-header">
+        <a href="next.html" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back
+        </a>
+
         <h1>Payment details</h1>
     </section>
-
-    <a href="next.html" class="back-btn">
-    <i class="fa-solid fa-arrow-left"></i>
-    Back
-    </a>
 
      <div class="booking-summary">
 
