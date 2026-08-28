@@ -130,25 +130,25 @@
 
     footer{
       text-align:center;
-      padding:25px;
+      /*padding:25px;*/
       border-top:1px solid #555;
       margin-top:20px;
       color: white;
+      padding-top: 5px;
+      padding-bottom: 5px;
     } 
-
-    footer:hover{
-      color:blueviolet;
-    }
-
-    .contact-icon{
+    
+    .footer-link {
       color: white;
-      font-size: 24px;
       text-decoration: none;
-      cursor: pointer;
     }
 
-    .contact-icon:hover{
-      color: blueviolet;
+    .footer-link:visited {
+      color: white;
+    }
+
+    .footer-link:hover {
+      color: deepskyblue;
     }
 
 </style>
@@ -215,18 +215,23 @@
     </section>
 
     <footer>
-      <h4>You can find us on </h4>
-      <a href="https://www.instagram.com/nrityanand_kathak_vidyalay" target="_blank">
+      
+      <a href="https://www.instagram.com/nrityanand_kathak_vidyalay" target="_blank" class="footer-link">
         <i class="fa-brands fa-instagram"></i>
         nrityanand_kathak_vidyalay
       </a>
     </br>
     </br>
-      <a href="contact.html" class="contact-icon">
+      <a href="tel:+9198700 73138" class="footer-link">
         <i class="fa-solid fa-phone"></i>
-        98700 73138 (Mrs. Supriya Shanbhag)
+        +9198700 73138
       </a>
-
+    <br>
+  <br>
+    <a href="mailto:nrityanand.kathak@gmail.com" class="footer-link">
+        <i class="fa-solid fa-envelope"></i> 
+        nrityanand.kathak@gmail.com
+    </a>
     </footer>
 
 </div>
