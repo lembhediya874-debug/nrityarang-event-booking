@@ -95,6 +95,7 @@ button{
 button:hover{
     background:#520b8a;
 }
+
 </style>
 
 <body>
@@ -119,7 +120,7 @@ button:hover{
 
 <div class="row">
 <span class="label">Date</span>
-<span class="value">6 semptember 2026</span>
+<span class="value">6 september 2026</span>
 </div>
 
 <div class="row">
@@ -137,16 +138,6 @@ button:hover{
     <span class="value" id="ticketSeats"></span>
 </div>
 
-<!--<div class="row">
-    <span class="label">Phone</span>
-    <span class="value" id="ticketPhone"></span>
-</div>
-
-<div class="row">
-    <span class="label">Alternate Phone</span>
-    <span class="value" id="ticketAltPhone"></span>
-</div>-->
-
 <div class="row">
     <span class="label">Branch</span>
     <span class="value" id="ticketBranch"></span>
@@ -156,11 +147,6 @@ button:hover{
     <span class="label">Amount</span>
     <span class="value" id="ticketAmount"></span>
 </div>
-
-<!--<div class="row">
-<span class="label">Amount</span>
-<span class="value">₹1000</span>
-</div>-->
 
 <div class="qr">
     <img id="ticketQR" src="" alt="QR Code">
@@ -197,11 +183,7 @@ if (!savedData) {
     document.getElementById("ticketSeats").textContent =
         ticket.seats.join(", ");
 
-    /*document.getElementById("ticketPhone").textContent =
-        ticket.phone;
-
-    document.getElementById("ticketAltPhone").textContent =
-        ticket.altPhone;*/
+    
 
     document.getElementById("ticketBranch").textContent =
         ticket.branch;

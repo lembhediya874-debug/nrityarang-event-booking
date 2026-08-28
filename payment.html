@@ -286,27 +286,6 @@ footer {
     white-space: nowrap;
 }
 
-/*.back-btn {
-    grid-column: 1;
-
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    color: white;
-    text-decoration: none;
-
-    font-size: 18px;
-    font-weight: 500;
-}
-
-.back-btn:hover {
-    color: #0a84ff;
-}
-
-.back-btn i {
-    font-size: 20px;
-}*/
 
 </style>
 
@@ -326,11 +305,6 @@ footer {
     </header>
 
     <section class="payment-header">
-        <!--<a href="next.html" class="back-btn">
-            <i class="fa-solid fa-arrow-left"></i>
-            Back
-        </a>-->
-
         <h1>Payment details</h1>
     </section>
 
@@ -401,7 +375,7 @@ footer {
         <small id="phoneError" class="error-message"></small>
     </div>
 
-    <div class="input-group">
+    <!--<div class="input-group">
     <label for="altPhone">Alternative Phone Number</label>
 
     <input
@@ -411,7 +385,7 @@ footer {
         required
     >
     <small id="altPhoneError" class="error-message"></small>
-    </div>
+    </div>-->
 
     <div class="input-group">
         <label for="branch">Branch</label>
@@ -542,26 +516,26 @@ footer {
 
     const name = document.getElementById("name");
     const phone = document.getElementById("phone");
-    const altPhone = document.getElementById("altPhone");
+    //const altPhone = document.getElementById("altPhone");
     const email = document.getElementById("email");
     const branch = document.getElementById("branch");
 
     const nameError = document.getElementById("nameError");
     const phoneError = document.getElementById("phoneError");
-    const altPhoneError = document.getElementById("altPhoneError");
+    //const altPhoneError = document.getElementById("altPhoneError");
     const emailError = document.getElementById("emailError");
     const branchError = document.getElementById("branchError");
 
     // Clear previous errors
     nameError.textContent = "";
     phoneError.textContent = "";
-    altPhoneError.textContent = "";
+    //altPhoneError.textContent = "";
     emailError.textContent = "";
     branchError.textContent = "";
 
     name.classList.remove("input-error");
     phone.classList.remove("input-error");
-    altPhone.classList.remove("input-error");
+    //altPhone.classList.remove("input-error");
     email.classList.remove("input-error");
     branch.classList.remove("input-error");
 
@@ -627,7 +601,7 @@ footer {
 // ALTERNATIVE PHONE VALIDATION
 // -----------------------------
 
-    const altPhonePattern = /^[6-9]\d{9}$/;
+    /*const altPhonePattern = /^[6-9]\d{9}$/;
 
     if (altPhone.value.trim() === "") {
 
@@ -644,7 +618,7 @@ footer {
 
         altPhone.classList.add("input-error");
         valid = false;
-    }
+    }*/
 
     // -----------------------------
     // BRANCH VALIDATION
