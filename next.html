@@ -87,8 +87,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 820px;
-    width: 820px;
+    min-width: 825px;
+    width: 825px;
     margin: 0 auto;
     }
 
@@ -270,6 +270,67 @@ svg circle.seat.held {
     stroke: #f0ad4e;
 }
 
+svg text.price-label {
+    font-size: 10px;
+    fill: #0a84ff;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+}
+
+svg line.price-line {
+    stroke: #777;
+    stroke-width: 0.5;
+    stroke-dasharray: 2 3;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* PRICE GUIDE INSIDE SVG */
+.price-label {
+    fill: #f24e6c;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.price-per-seat {
+    fill: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+}
+
+.price-line {
+    stroke: #777;
+    stroke-width: 0.7;
+    stroke-dasharray: 3 3;
+    opacity: 0.7;
+}
+
+.price-bracket {
+    stroke: #f24e6c;
+    stroke-width: 1;
+    opacity: 0.8;
+}
+
+/* PRICE LABELS INSIDE SVG */
+.price-label {
+    fill: #f24e6c;
+    font-size: 9px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
+/* THIN PRICE SECTION LINES */
+.price-line {
+    stroke: #777;
+    stroke-width: 0.7;
+    stroke-dasharray: 3 3;
+    opacity: 0.7;
+}
+
 </style>
 
 <body>
@@ -448,28 +509,422 @@ try {
   const bookBtn = document.getElementById("bookBtn");
   const totalAmount = document.getElementById("totalAmount");
 
-  // DRAW AUDITORIUM
 
-  function drawAuditorium() {
+  // DRAW AUDITORIUM
+// =====================================================
+// DRAW AUDITORIUM
+// =====================================================
+
+function drawAuditorium() {
 
     svg.innerHTML = "";
 
-    let currentY = 24; // currentY +=24
-    
-// VIEWBOX
+    let currentY = 24;
 
-    const LEFT_RIGHT_EDGE = 240;
+    let previousPrice = null;
+
+    const LEFT_RIGHT_EDGE = 250;
     const CENTER_RIGHT_EDGE = 570;
-    const RIGHT_RIGHT_EDGE = 760;
+    const RIGHT_RIGHT_EDGE = 755;
 
     const seatSpacing = 16;
 
+    // =====================================================
+// PRICE LABEL
+// =====================================================
+
+function drawPriceLabel(y, price) {
+
+    if (price === undefined || price === null) return;
+
+    const NS = "http://www.w3.org/2000/svg";
+
+    // RIGHT PRICE
+    const rightPrice = document.createElementNS(
+        NS,
+        "text"
+    );
+
+    rightPrice.setAttribute("x", "790");
+    rightPrice.setAttribute("y", y);
+
+    rightPrice.setAttribute(
+        "class",
+        "price-label"
+    );
+
+    rightPrice.textContent = `₹${price}`;
+
+    svg.appendChild(rightPrice);
+}
+
+// THIN PRICE SECTION LINE
+
+function drawPriceLine(y) {
+
+    const NS = "http://www.w3.org/2000/svg";
+
+    // LEFT SIDE LINE
+    const leftLine = document.createElementNS(
+        NS,
+        "line"
+    );
+
+    leftLine.setAttribute("x1", "45");
+    leftLine.setAttribute("y1", y);
+
+    leftLine.setAttribute("x2", "225");
+    leftLine.setAttribute("y2", y);
+
+    leftLine.setAttribute(
+        "class",
+        "price-line"
+    );
+
+    svg.appendChild(leftLine);
+
+
+    // RIGHT SIDE LINE
+    const rightLine = document.createElementNS(
+        NS,
+        "line"
+    );
+
+    rightLine.setAttribute("x1", "610");
+    rightLine.setAttribute("y1", y);
+
+    rightLine.setAttribute("x2", "825");
+    rightLine.setAttribute("y2", y);
+
+    rightLine.setAttribute(
+        "class",
+        "price-line"
+    );
+
+    svg.appendChild(rightLine);
+}
+
+    const NS = "http://www.w3.org/2000/svg";
+
+
+    // =====================================================
+    // HELPER: DRAW PRICE LABEL ON BOTH SIDES
+    // =====================================================
+
+    function drawPriceLabel(y, price) {
+
+        if (price === undefined || price === null) return;
+
+        // RIGHT PRICE
+        const rightPrice = document.createElementNS(NS, "text");
+
+        rightPrice.setAttribute("x", "800");
+        rightPrice.setAttribute("y", y + 3);
+        rightPrice.setAttribute("class", "price-label");
+        rightPrice.setAttribute("text-anchor", "middle");
+
+        rightPrice.textContent = `₹${price}`;
+
+        svg.appendChild(rightPrice);
+    }
+
+    // =====================================================
+    // HELPER: DRAW THIN PRICE SEPARATOR
+    // =====================================================
+
+    function drawPriceLine(y) {
+
+        const line = document.createElementNS(NS, "line");
+
+        line.setAttribute("x1", "45");
+        line.setAttribute("y1", y);
+
+        line.setAttribute("x2", "805");
+        line.setAttribute("y2", y);
+
+        line.setAttribute("class", "price-line");
+
+        svg.appendChild(line);
+    }
 
     rowSpecs.forEach((row) => {
 
-      const balconyText = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "text"
+    if (row.type !== "gap") {
+
+    const currentPrice = rowPrices[row.label];
+
+    // Do not show price for blocked rows
+    if (!blockedRows.includes(row.label)) {
+
+        // Price changed
+        if (currentPrice !== previousPrice) {
+
+            // Separator before new section
+            if (previousPrice !== null) {
+                drawPriceLine(currentY - 10);
+            }
+
+            // Price on BOTH sides
+            drawPriceLabel(currentY, currentPrice);
+
+            previousPrice = currentPrice;
+        }
+    }
+}
+
+        const leftLabel = document.createElementNS(
+            NS,
+            "text"
+        );
+
+        leftLabel.setAttribute("x", "25");
+        leftLabel.setAttribute("y", currentY);
+        leftLabel.setAttribute("class", "row-label");
+
+        leftLabel.textContent = row.label;
+
+        svg.appendChild(leftLabel);
+
+
+        // =================================================
+        // ROW LABEL - RIGHT
+        // =================================================
+
+        const rightLabel = document.createElementNS(
+            NS,
+            "text"
+        );
+
+        rightLabel.setAttribute("x", "825");
+        rightLabel.setAttribute("y", currentY);
+        rightLabel.setAttribute("class", "row-label");
+
+        rightLabel.textContent = row.label;
+
+        svg.appendChild(rightLabel);
+
+
+        // =================================================
+        // SEAT NUMBER
+        // =================================================
+
+        let seatNumber = 1;
+
+
+        function drawBlock(startOrEnd, count, alignRight = true) {
+
+            if (count <= 0) return;
+
+
+            for (let i = 0; i < count; i++) {
+
+                let x;
+
+
+                if (alignRight) {
+
+                    // Seats grow towards LEFT
+                    x =
+                        startOrEnd -
+                        ((count - 1 - i) * seatSpacing);
+
+                } else {
+
+                    // Seats grow towards RIGHT
+                    x =
+                        startOrEnd +
+                        (i * seatSpacing);
+                }
+
+
+                const id =
+                    `${row.label}-${String(seatNumber).padStart(2, "0")}`;
+
+                const num = seatNumber;
+
+
+                // =============================================
+                // SEAT CIRCLE
+                // =============================================
+
+                const circle = document.createElementNS(
+                    NS,
+                    "circle"
+                );
+
+                circle.setAttribute("cx", x);
+                circle.setAttribute("cy", currentY);
+                circle.setAttribute("r", 6.5);
+
+
+                let stateClass = "seat";
+
+
+                if (blockedRows.includes(row.label)) {
+
+                    stateClass += " blocked";
+
+                }
+                else if (bookedSeats.includes(id)) {
+
+                    stateClass += " booked";
+
+                }
+                else if (heldSeats.includes(id)) {
+
+                    stateClass += " held";
+
+                }
+                else if (selectedSeats.includes(id)) {
+
+                    stateClass += " selected";
+                }
+
+
+                circle.setAttribute("class", stateClass);
+
+                circle.setAttribute(
+                    "data-seat-id",
+                    id
+                );
+
+
+                // =============================================
+                // SEAT CLICK
+                // =============================================
+
+                circle.addEventListener("click", () => {
+
+                    if (blockedRows.includes(row.label)) {
+                        return;
+                    }
+
+
+                    if (isSeatUnavailable(id)) {
+                        return;
+                    }
+
+
+                    if (selectedSeats.includes(id)) {
+
+                        selectedSeats =
+                            selectedSeats.filter(
+                                s => s !== id
+                            );
+
+                    } else {
+
+                        selectedSeats.push(id);
+                    }
+
+
+                    drawAuditorium();
+
+                    updateUI();
+
+                });
+
+
+                svg.appendChild(circle);
+
+
+                // =============================================
+                // SEAT NUMBER TEXT
+                // =============================================
+
+                const text = document.createElementNS(
+                    NS,
+                    "text"
+                );
+
+                text.setAttribute("x", x);
+                text.setAttribute("y", currentY);
+                text.setAttribute("class", "seat-text");
+
+                text.textContent = num;
+
+                svg.appendChild(text);
+
+
+                seatNumber++;
+            }
+        }
+
+
+        // =====================================================
+        // LEFT BLOCK
+        // =====================================================
+
+        drawBlock(
+            LEFT_RIGHT_EDGE,
+            row.left,
+            true
+        );
+
+
+        // =====================================================
+        // CENTER BLOCK
+        // =====================================================
+
+        let centreEdge = CENTER_RIGHT_EDGE;
+
+
+        if (
+            [
+                "U", "T", "S",
+                "R", "Q", "P", "O", "N",
+                "M", "L", "K", "J",
+                "H", "G", "F", "E", "D",
+                "C", "B", "A"
+            ].includes(row.label)
+        ) {
+
+            centreEdge = 500;
+        }
+
+
+        drawBlock(
+            centreEdge,
+            row.center,
+            true
+        );
+
+        // RIGHT BLOCK
+
+        if (
+            [
+                "M", "L", "K", "J",
+                "H", "G", "F", "E", "D",
+                "C", "B", "A"
+            ].includes(row.label)
+        ) {
+
+            drawBlock(
+                580,
+                row.right,
+                false
+            );
+
+        } else {
+
+            drawBlock(
+                RIGHT_RIGHT_EDGE,
+                row.right,
+                true
+            );
+        }
+
+        // MOVE TO NEXT ROW
+
+        currentY += 21;
+
+    });
+
+    // BALCONY LINE
+
+    const balconyText = document.createElementNS(
+        NS,
+        "text"
     );
 
     balconyText.setAttribute("x", "425");
@@ -480,186 +935,19 @@ try {
     balconyText.setAttribute("font-weight", "bold");
     balconyText.setAttribute("fill", "white");
 
-    balconyText.textContent = "-----------------------------------------↑ BALCONY ↑------------------------------------------";
+    balconyText.textContent =
+        "-----------------------------------------↑ BALCONY ↑------------------------------------------";
 
     svg.appendChild(balconyText);
 
+    // FINAL SVG HEIGHT
+
     svg.setAttribute(
-      "viewBox",
-      `0 0 850 ${currentY + 20}`
-    )
-
-      // LEFT ROW LABEL
-
-      const leftLabel = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "text"
-      );
-
-      leftLabel.setAttribute("x", 25);
-      leftLabel.setAttribute("y", currentY);
-      leftLabel.setAttribute("class", "row-label");
-      leftLabel.textContent = row.label;
-
-      svg.appendChild(leftLabel);
-
-      // RIGHT ROW LABEL
-
-      const rightLabel = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "text"
-      );
-
-      rightLabel.setAttribute("x", 800);
-      rightLabel.setAttribute("y", currentY);
-      rightLabel.setAttribute("class", "row-label");
-      rightLabel.textContent = row.label;
-
-      svg.appendChild(rightLabel);
-
-      // SEAT NUMBER
-      // ---------------------------------------------------
-
-      let seatNumber = 1;
-
-      function drawBlock(startOrEnd, count, alignRight = true) {
-
-  if (count <= 0) return;
-
-  for (let i = 0; i < count; i++) {
-
-    let x;
-
-    if (alignRight) {
-      // RIGHT aligned
-      // Seats grow towards LEFT
-      x = startOrEnd - ((count - 1 - i) * seatSpacing);
-    } else {
-      // LEFT aligned
-      // Seats grow towards RIGHT
-      x = startOrEnd + (i * seatSpacing);
-    }
-
-    const id =
-      `${row.label}-${String(seatNumber).padStart(2, "0")}`;
-
-    const num = seatNumber;
-
-    const circle = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "circle"
+        "viewBox",
+        `0 0 870 ${currentY + 20}`
     );
-
-    circle.setAttribute("cx", x);
-    circle.setAttribute("cy", currentY);
-    circle.setAttribute("r", 6.5);
-
-    let stateClass = "seat";
-
-    if (blockedRows.includes(row.label)) {
-      stateClass += " blocked";
-    }
-    else if (bookedSeats.includes(id)) {
-      stateClass += " booked";
-    }
-    else if (heldSeats.includes(id)) {
-      stateClass += " held";
-    }
-    else if (selectedSeats.includes(id)) {
-      stateClass += " selected";
-    }
-
-    circle.setAttribute("class", stateClass);
-    circle.setAttribute("data-seat-id", id);
-
-    const text = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "text"
-    );
-
-    text.setAttribute("x", x);
-    text.setAttribute("y", currentY);
-    text.setAttribute("class", "seat-text");
-    text.textContent = num;
-
-    circle.addEventListener("click", () => {
-
-      if (blockedRows.includes(row.label)) return;
-
-      if (isSeatUnavailable(id)) return;
-
-      if (selectedSeats.includes(id)) {
-        selectedSeats =
-          selectedSeats.filter(s => s !== id);
-      } 
-      else {
-        selectedSeats.push(id);
-      }
-
-      drawAuditorium();
-      updateUI();
-    });
-
-    svg.appendChild(circle);
-    svg.appendChild(text);
-
-    seatNumber++;
-  }
 }
-
-      // DRAW THREE BLOCKS
-      // LEFT BLOCK
-      drawBlock(
-        LEFT_RIGHT_EDGE,
-        row.left,
-        true 
-      );
-
-      //centre block
-      let centreEdge = CENTER_RIGHT_EDGE;
-      if(
-        ["U", "T", "S", "R", "Q", "P", "O", "N","M", "L", "K", "J", "H", "G", "F", "E", "D", "C", "B", "A"
-        ].includes(row.label)
-      ){
-        centreEdge = 500;
-      }
-
-      drawBlock(
-        centreEdge,
-        row.center,
-        true
-      );
-
-
-      // RIGHT BLOCK
-      if (["M", "L", "K", "J", "H", "G", "F", "E", "D", "C","B", "A"].includes(row.label)) {
-      drawBlock(
-        580,
-        row.right,
-        false
-      );
-      }
-      else{
-        drawBlock(
-          RIGHT_RIGHT_EDGE,
-          row.right,
-          true
-        );
-      }
-      
-      currentY += 21;
-
-    });
-
-    svg.setAttribute(
-      "viewBox",
-      `0 0 850 ${currentY + 20}`
-    );
-
-  }
-    // =====================================================
     // SVG SIZE
-    // =====================================================
 
     function updateUI() {
 
@@ -748,30 +1036,22 @@ async function loadBookedSeats() {
             data.heldSeats
         );
 
-        // ==========================================
         // UPDATE CONFIRMED SEATS
-        // ==========================================
 
         bookedSeats = data.bookedSeats || [];
 
-        // ==========================================
         // UPDATE HOLD SEATS
-        // ==========================================
 
         heldSeats = data.heldSeats || [];
 
-        // ==========================================
         // SAVE CONFIRMED SEATS TO CACHE
-        // ==========================================
 
         localStorage.setItem(
             BOOKED_SEATS_CACHE_KEY,
             JSON.stringify(bookedSeats)
         );
 
-        // ==========================================
         // UPDATE DISPLAY
-        // ==========================================
 
         updateBookedSeatDisplay();
 
@@ -823,9 +1103,7 @@ function updateBookedSeatDisplay() {
             "selected"
         );
 
-        // ==========================================
         // CONFIRMED
-        // ==========================================
 
         if (bookedSeats.includes(seatId)) {
 
@@ -838,10 +1116,7 @@ function updateBookedSeatDisplay() {
                 );
 
         }
-
-        // ==========================================
         // TEMPORARY HOLD
-        // ==========================================
 
         else if (heldSeats.includes(seatId)) {
 
@@ -855,9 +1130,7 @@ function updateBookedSeatDisplay() {
 
         }
 
-        // ==========================================
         // LOCALLY SELECTED
-        // ==========================================
 
         else if (selectedSeats.includes(seatId)) {
 
@@ -905,9 +1178,7 @@ function updateBookedSeatDisplay() {
     }
 }
 
-  // =====================================================
   // BOOK BUTTON
-  // ====================================================
 
 bookBtn.addEventListener("click", async () => {
 
@@ -1014,9 +1285,7 @@ bookBtn.addEventListener("click", async () => {
             );
         }
 
-        // ==========================================
         // GO TO PAYMENT PAGE
-        // ==========================================
 
         window.location.href =
             `payment.html?seats=${encodeURIComponent(
