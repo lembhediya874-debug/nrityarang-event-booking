@@ -8,27 +8,29 @@
 </head>
 
 <style>
-
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
 }
 
 body {
-    min-height: 100vh;
+    min-height: 500px;
     background: #1f1f1f;
     font-family: Arial, sans-serif;
     color: #222;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px 15px;
+    padding: 27px 12px;
 }
 
 .ticket-container {
-    width: 100%;
-    max-width: 450px;
+    width: 90%;
+    max-width: 430px;
     background: white;
     border-radius: 24px;
     overflow: hidden;
@@ -43,17 +45,17 @@ body {
     );
     color: white;
     text-align: center;
-    padding: 28px 20px 25px;
+    padding: 25px 18px 22px;
 }
 
 .ticket-header h1 {
-    font-size: 26px;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 6px;
 }
 
 .booking-status {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
 }
 
@@ -228,6 +230,10 @@ body {
 }
 
 @media print {
+    *{
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
 
     body {
         background: white;
@@ -238,6 +244,25 @@ body {
         max-width: 650px;
         box-shadow: none;
         border: 1px solid #ddd;
+    }
+
+    .ticket-header {
+        background: linear-gradient(
+            135deg,
+            #7b2cbf,
+            #f24e6c
+        ) !important;
+
+        color: white !important;
+    }
+
+      .booking-id {
+        color: #7b2cbf !important;
+    }
+
+    .amount-row .detail-label,
+    .amount-row .detail-value {
+        color: #7b2cbf !important;
     }
 
     .print-btn {
@@ -282,9 +307,7 @@ body {
     animation: confetti-burst 2.8s ease-out forwards;
 }
 
-
 /* LEFT + RIGHT BURST */
-
 .confetti-piece.left {
     left: 0;
 }
@@ -292,7 +315,6 @@ body {
 .confetti-piece.right {
     right: 0;
 }
-
 
 /* ANIMATION */
 
@@ -322,7 +344,6 @@ body {
 </style>
 
 <body>
-
     <!-- CONFETTI BURST -->
 <div id="confetti-container"></div>
 
@@ -399,7 +420,6 @@ if (!savedData) {
     const ticket = JSON.parse(savedData);
 
     // DISPLAY TICKET DETAILS
-
     document.getElementById("bookingId").textContent =
         ticket.bookingId;
 
@@ -409,8 +429,6 @@ if (!savedData) {
     document.getElementById("ticketSeats").textContent =
         ticket.seats.join(", ");
 
-    
-
     document.getElementById("ticketBranch").textContent =
         ticket.branch;
 
@@ -418,7 +436,6 @@ if (!savedData) {
         "₹" + Number(ticket.total).toLocaleString("en-IN");
 
     // CREATE QR DATA
-
     const qrData = `
 Nrityanand Kathak Vidyalay
 
