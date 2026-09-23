@@ -388,25 +388,19 @@ footer {
         </select>
         <small id="branchError" class="error-message"></small>
     </div>
-
 </div>
 
-
 <div class="total-section">
-
     <span>Total Amount</span>
-
     <span id="totalAmount">
         ₹0
     </span>
 
 </div>
 
-
 <button id="payBtn">
     Proceed to Payment
 </button>
-
 
     <footer>
       <div class="security">
@@ -438,7 +432,7 @@ footer {
         params.get("total")
     ) || 0;
 
-    const orderId = params.get("orderId"); /*|| ""*/
+    const orderId = params.get("orderId") || "";
 
     let paymentCompleted = false;
 
@@ -487,18 +481,14 @@ footer {
             ? seats.join(", ")
             : "No seats selected";
 
-
     // Display number of tickets
     document.getElementById("seatCount")
         .textContent = seats.length;
-
 
     // Display total amount
     document.getElementById("totalAmount")
         .textContent =
         "₹" + total.toLocaleString("en-IN");
-
-        
 
     document.getElementById("payBtn").addEventListener("click", function () {
 
@@ -525,71 +515,48 @@ footer {
 
     let valid = true;
 
-    // -----------------------------
     // NAME VALIDATION
-    // -----------------------------
-
     if (name.value.trim() === "") {
         nameError.textContent = "Please enter your full name.";
         name.classList.add("input-error");
         valid = false;
     }
 
-    // -----------------------------
     // EMAIL VALIDATION
-    // -----------------------------
-
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (email.value.trim() === "") {
-
         emailError.textContent =
             "Please enter your email address.";
-
         email.classList.add("input-error");
         valid = false;
 
     } else if (!emailPattern.test(email.value.trim())) {
-
         emailError.textContent =
             "Please enter a valid email address.";
-
         email.classList.add("input-error");
         valid = false;
     }
 
-    // -----------------------------
     // PHONE VALIDATION
-    // -----------------------------
-
     const phonePattern = /^[6-9]\d{9}$/;
 
     if (phone.value.trim() === "") {
-
         phoneError.textContent =
             "Please enter your phone number.";
-
         phone.classList.add("input-error");
         valid = false;
 
     } else if (!phonePattern.test(phone.value.trim())) {
-
         phoneError.textContent =
             "Please enter a valid 10-digit mobile number.";
-
         phone.classList.add("input-error");
         valid = false;
     }
 
-    // -----------------------------
     // BRANCH VALIDATION
-    // -----------------------------
-
     if (branch.value === "") {
-
         branchError.textContent =
             "Please select your branch.";
-
         branch.classList.add("input-error");
         valid = false;
     }
@@ -605,22 +572,13 @@ footer {
         return;
     }
 
-    // -----------------------------
     // OPEN RAZORPAY
-    // -----------------------------
-
     const options = {
-
         key: RAZORPAY_KEY_ID,
-
         amount: total * 100,
-
         currency: "INR",
-
         name: "Nrityarang Event Booking",
-
         description: "Event Ticket Booking",
-
         order_id: orderId,
 
         prefill: {
@@ -630,7 +588,6 @@ footer {
         },
 
         handler: async function (response) {
-
             console.log("Razorpay payment response:", response);
 
             try {

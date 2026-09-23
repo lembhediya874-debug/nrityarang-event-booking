@@ -412,11 +412,8 @@ body {
 const savedData = localStorage.getItem("ticketData");
 
 if (!savedData) {
-
     alert("Ticket information not found.");
-    
 } else {
-
     const ticket = JSON.parse(savedData);
 
     // DISPLAY TICKET DETAILS
@@ -465,13 +462,10 @@ Amount: ₹${Number(ticket.total).toLocaleString("en-IN")}
     document.getElementById("ticketQR").src = qrURL;
 
 }
-
 </script>
 
 <script>
-
 function createConfettiBurst() {
-
     const container = document.getElementById("confetti-container");
 
     const colors = [
@@ -520,57 +514,44 @@ function createConfettiBurst() {
             -(200 + Math.random() * 600);
 
         // Horizontal movement
-
         piece.style.setProperty(
             "--x",
             distanceX + "px"
         );
 
         // Vertical movement
-
         piece.style.setProperty(
             "--y",
             distanceY + "px"
         );
 
         // Random rotation
-
         piece.style.setProperty(
             "--rotation",
             (Math.random() * 1440 - 720) + "deg"
         );
 
         // Different animation speeds
-
         piece.style.animationDuration =
             (2 + Math.random() * 1.5) + "s";
 
         // Slightly different delays
-
         piece.style.animationDelay =
             (Math.random() * 0.35) + "s";
 
         container.appendChild(piece);
 
         // Remove after animation
-
         setTimeout(() => {
-
             piece.remove();
-
         }, 4000);
     }
 }
 // START WHEN PAGE LOADS
-
 window.addEventListener("load", () => {
-
     setTimeout(() => {
-
         createConfettiBurst();
-
     }, 300);
-
 });
 
 </script>

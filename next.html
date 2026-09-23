@@ -326,9 +326,9 @@ svg line.price-line {
 /* THIN PRICE SECTION LINES */
 .price-line {
     stroke: #777;
-    stroke-width: 0.7;
+    stroke-width: 0.9;
     stroke-dasharray: 3 3;
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
 </style>
@@ -382,7 +382,7 @@ svg line.price-line {
     <script>
       const API_URL = "https://nrityarang-event-booking.onrender.com";
 
-      // Create or retrieve the user's session ID
+      // Createthe user's session ID
       let userSessionId = localStorage.getItem("userSessionId");
 
       if (!userSessionId) {
@@ -526,7 +526,7 @@ function drawAuditorium() {
 
 //price label
 
-function drawPriceLabel(y, price) {
+/*function drawPriceLabel(y, price) {
 
     if (price === undefined || price === null) return;
 
@@ -549,7 +549,7 @@ function drawPriceLabel(y, price) {
     rightPrice.textContent = `₹${price}`;
 
     svg.appendChild(rightPrice);
-}
+}*/
 
 // THIN PRICE SECTION LINE
 
@@ -620,7 +620,6 @@ function drawPriceLine(y) {
     }
 
     //DRAW THIN PRICE SEPARATOR
-
     function drawPriceLine(y) {
 
         const line = document.createElementNS(NS, "line");
@@ -675,8 +674,6 @@ function drawPriceLine(y) {
         svg.appendChild(leftLabel);
 
         // ROW LABEL - RIGHT
-
-
         const rightLabel = document.createElementNS(
             NS,
             "text"
@@ -691,29 +688,23 @@ function drawPriceLine(y) {
         svg.appendChild(rightLabel);
 
         // SEAT NUMBER
-
         let seatNumber = 1;
-
 
         function drawBlock(startOrEnd, count, alignRight = true) {
 
             if (count <= 0) return;
 
-
             for (let i = 0; i < count; i++) {
 
                 let x;
 
-
                 if (alignRight) {
-
                     // Seats grow towards LEFT
                     x =
                         startOrEnd -
                         ((count - 1 - i) * seatSpacing);
 
                 } else {
-
                     // Seats grow towards RIGHT
                     x =
                         startOrEnd +
@@ -727,7 +718,6 @@ function drawPriceLine(y) {
                 const num = seatNumber;
 
                 // SEAT CIRCLE
-
                 const circle = document.createElementNS(
                     NS,
                     "circle"
@@ -740,27 +730,18 @@ function drawPriceLine(y) {
 
                 let stateClass = "seat";
 
-
                 if (blockedRows.includes(row.label)) {
-
                     stateClass += " blocked";
-
                 }
                 else if (bookedSeats.includes(id)) {
-
                     stateClass += " booked";
-
                 }
                 else if (heldSeats.includes(id)) {
-
                     stateClass += " held";
-
                 }
                 else if (selectedSeats.includes(id)) {
-
                     stateClass += " selected";
                 }
-
 
                 circle.setAttribute("class", stateClass);
 
@@ -776,13 +757,9 @@ function drawPriceLine(y) {
                     if (blockedRows.includes(row.label)) {
                         return;
                     }
-
-
                     if (isSeatUnavailable(id)) {
                         return;
                     }
-
-
                     if (selectedSeats.includes(id)) {
 
                         selectedSeats =
@@ -794,10 +771,7 @@ function drawPriceLine(y) {
 
                         selectedSeats.push(id);
                     }
-
-
                     drawAuditorium();
-
                     updateUI();
 
                 });
@@ -914,9 +888,7 @@ function drawPriceLine(y) {
     );
 }
     // SVG SIZE
-
     function updateUI() {
-
     const sortedSeats = [...selectedSeats].sort();
 
     // Selected seats
@@ -933,11 +905,11 @@ function drawPriceLine(y) {
 
     // Total number of seats in the entire hall
     const totalHallSeats = rowSpecs.reduce((total, row) => {
-
+    //ignore gap rows
     if (row.type === "gap") {
         return total;
     }
-
+    //ignore blocked seats
     if (blockedRows.includes(row.label)) {
         return total;
     }
@@ -975,7 +947,6 @@ function drawPriceLine(y) {
 async function loadBookedSeats() {
 
     try {
-
         const response = await fetch(
             `${API_URL}/api/booked-seats`,
             {
@@ -1003,22 +974,18 @@ async function loadBookedSeats() {
         );
 
         // UPDATE CONFIRMED SEATS
-
         bookedSeats = data.bookedSeats || [];
 
         // UPDATE HOLD SEATS
-
         heldSeats = data.heldSeats || [];
 
         // SAVE CONFIRMED SEATS TO CACHE
-
         localStorage.setItem(
             BOOKED_SEATS_CACHE_KEY,
             JSON.stringify(bookedSeats)
         );
 
         // UPDATE DISPLAY
-
         updateBookedSeatDisplay();
 
         updateUI();
@@ -1070,7 +1037,6 @@ function updateBookedSeatDisplay() {
         );
 
         // CONFIRMED
-
         if (bookedSeats.includes(seatId)) {
 
             circle.classList.add("booked");
@@ -1083,27 +1049,19 @@ function updateBookedSeatDisplay() {
 
         }
         // TEMPORARY HOLD
-
         else if (heldSeats.includes(seatId)) {
-
             circle.classList.add("held");
-
             // Remove from local selection
             selectedSeats =
                 selectedSeats.filter(
                     seat => seat !== seatId
                 );
-
         }
 
         // LOCALLY SELECTED
-
         else if (selectedSeats.includes(seatId)) {
-
             circle.classList.add("selected");
-
         }
-
     });
 
     updateUI();
@@ -1116,7 +1074,6 @@ function updateBookedSeatDisplay() {
     }
 
     try {
-
         const response = await fetch(
             `${API_URL}/api/release-seats`,
             {
@@ -1145,16 +1102,13 @@ function updateBookedSeatDisplay() {
 }
 
   // BOOK BUTTON
-
 bookBtn.addEventListener("click", async () => {
 
     if (selectedSeats.length === 0) {
         alert("Please select at least one seat.");
         return;
     }
-
     try {
-
         bookBtn.disabled = true;
         bookBtn.textContent = "Checking seats...";
 
@@ -1172,7 +1126,6 @@ bookBtn.addEventListener("click", async () => {
         }
 
         const seatData = await seatResponse.json();
-
         bookedSeats = seatData.bookedSeats || [];
         heldSeats = seatData.heldSeats || [];
 
