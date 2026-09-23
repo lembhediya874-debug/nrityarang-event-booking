@@ -495,7 +495,6 @@ try {
     console.error("Booked seats cache error:", error);
     bookedSeats = [];
 }
-  //let heldSeats = [];
 
   function isSeatUnavailable(seatId) {
     return bookedSeats.includes(seatId) ||
@@ -511,10 +510,6 @@ try {
 
 
   // DRAW AUDITORIUM
-// =====================================================
-// DRAW AUDITORIUM
-// =====================================================
-
 function drawAuditorium() {
 
     svg.innerHTML = "";
@@ -529,9 +524,7 @@ function drawAuditorium() {
 
     const seatSpacing = 16;
 
-    // =====================================================
-// PRICE LABEL
-// =====================================================
+//price label
 
 function drawPriceLabel(y, price) {
 
@@ -607,9 +600,7 @@ function drawPriceLine(y) {
     const NS = "http://www.w3.org/2000/svg";
 
 
-    // =====================================================
-    // HELPER: DRAW PRICE LABEL ON BOTH SIDES
-    // =====================================================
+    //PRICE LABEL ON BOTH SIDES
 
     function drawPriceLabel(y, price) {
 
@@ -628,9 +619,7 @@ function drawPriceLine(y) {
         svg.appendChild(rightPrice);
     }
 
-    // =====================================================
-    // HELPER: DRAW THIN PRICE SEPARATOR
-    // =====================================================
+    //DRAW THIN PRICE SEPARATOR
 
     function drawPriceLine(y) {
 
@@ -685,10 +674,8 @@ function drawPriceLine(y) {
 
         svg.appendChild(leftLabel);
 
-
-        // =================================================
         // ROW LABEL - RIGHT
-        // =================================================
+
 
         const rightLabel = document.createElementNS(
             NS,
@@ -703,10 +690,7 @@ function drawPriceLine(y) {
 
         svg.appendChild(rightLabel);
 
-
-        // =================================================
         // SEAT NUMBER
-        // =================================================
 
         let seatNumber = 1;
 
@@ -742,10 +726,7 @@ function drawPriceLine(y) {
 
                 const num = seatNumber;
 
-
-                // =============================================
                 // SEAT CIRCLE
-                // =============================================
 
                 const circle = document.createElementNS(
                     NS,
@@ -788,10 +769,7 @@ function drawPriceLine(y) {
                     id
                 );
 
-
-                // =============================================
                 // SEAT CLICK
-                // =============================================
 
                 circle.addEventListener("click", () => {
 
@@ -827,10 +805,7 @@ function drawPriceLine(y) {
 
                 svg.appendChild(circle);
 
-
-                // =============================================
                 // SEAT NUMBER TEXT
-                // =============================================
 
                 const text = document.createElementNS(
                     NS,
@@ -850,22 +825,14 @@ function drawPriceLine(y) {
             }
         }
 
-
-        // =====================================================
         // LEFT BLOCK
-        // =====================================================
-
         drawBlock(
             LEFT_RIGHT_EDGE,
             row.left,
             true
         );
 
-
-        // =====================================================
         // CENTER BLOCK
-        // =====================================================
-
         let centreEdge = CENTER_RIGHT_EDGE;
 
 
@@ -921,7 +888,6 @@ function drawPriceLine(y) {
     });
 
     // BALCONY LINE
-
     const balconyText = document.createElementNS(
         NS,
         "text"
@@ -1244,10 +1210,7 @@ bookBtn.addEventListener("click", async () => {
             return;
         }
 
-        // ==========================================
         // CREATE RAZORPAY ORDER
-        // ==========================================
-
         bookBtn.textContent = "Creating Order...";
 
         const response = await fetch(
@@ -1286,7 +1249,6 @@ bookBtn.addEventListener("click", async () => {
         }
 
         // GO TO PAYMENT PAGE
-
         window.location.href =
             `payment.html?seats=${encodeURIComponent(
                 selectedSeats.join(",")
